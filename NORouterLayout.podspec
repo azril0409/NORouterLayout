@@ -16,7 +16,7 @@ Pod::Spec.new do |spec|
   #
 
   spec.name         = "NORouterLayout"
-  spec.version      = "1.0.0"
+  spec.version      = "1.0.1"
   spec.summary      = "It is an IOS app router module for swiftui"
 
   # This description is used to generate tags and improve search results.
@@ -25,7 +25,7 @@ Pod::Spec.new do |spec|
   #   * Write the description between the DESC delimiters below.
   #   * Finally, don't worry about the indent, CocoaPods strips it!
   spec.description  = <<-DESC
-  It is an IOS app router module for swiftui
+  NORouterLayout is an ios router framework for SwiftUI.
                    DESC
 
   spec.homepage     = "https://github.com/azril0409/NORouterLayout"
@@ -83,9 +83,9 @@ limitations under the License.
 
   #  When using multiple platforms
   spec.ios.deployment_target = "13.0"
-  spec.osx.deployment_target = "10.15"
-  spec.watchos.deployment_target = "6.0"
-  spec.tvos.deployment_target = "13.0"
+  #spec.osx.deployment_target = "10.15"
+  #spec.watchos.deployment_target = "6.0"
+  #spec.tvos.deployment_target = "13.0"
 
 
   # ――― Source Location ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #

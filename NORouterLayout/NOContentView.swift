@@ -8,10 +8,10 @@
 
 import SwiftUI
 
-struct NOContentView: View {
+public struct NOContentView: View {
     @EnvironmentObject private var routerViewModel:RouterViewModel
-    
-    var body: some View {
+    public init(){}
+    public var body: some View {
         GeometryReader { geometry in
             ZStack{
                 Color.clear.sheet(isPresented: self.$routerViewModel.isSheetView) {
