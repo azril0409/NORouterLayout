@@ -21,7 +21,7 @@ public class RouterViewModel:ObservableObject{
     @Published var sheetView:AnyView? = .none
     @Published var bottomName:String? = .none
     @Published var bottomView:AnyView? = .none
-    @Published var bottomY:CGFloat = UIScreen.main.bounds.size.height
+    @Published var bottomY:CGFloat = UIScreen.main.bounds.height
     
     public init(_ contentView:AnyView, _ name:String="") {
         self.contentView = contentView
@@ -63,7 +63,7 @@ public class RouterViewModel:ObservableObject{
                     viewModel.isSheetView = false
                     viewModel.sheetView = .none
                 }else {
-                    viewModel.bottomY = UIScreen.main.bounds.size.height
+                    viewModel.bottomY = UIScreen.main.bounds.height
                     viewModel.bottomView = .none
                 }
             }
