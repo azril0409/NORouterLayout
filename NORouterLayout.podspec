@@ -25,6 +25,7 @@ Pod::Spec.new do |spec|
   #   * Write the description between the DESC delimiters below.
   #   * Finally, don't worry about the indent, CocoaPods strips it!
   spec.description  = <<-DESC
+  It is an IOS app router module for swiftui
                    DESC
 
   spec.homepage     = "https://github.com/azril0409/NORouterLayout"
