@@ -9,8 +9,8 @@
 import SwiftUI
 import UIKit
 
-public class RouterViewModel:ObservableObject{
-    private var previouRouterViewModel:RouterViewModel?
+public class NORouterViewModel:ObservableObject{
+    private var previouRouterViewModel:NORouterViewModel?
     private var viewHistory:[AnyView] = []
     private var nameList:[String] = []
     @Published var contentName:String
@@ -29,7 +29,7 @@ public class RouterViewModel:ObservableObject{
         self.previouRouterViewModel = .none
     }
     
-    private init(_ contentView:AnyView, _ name:String="", _ previouRouterViewModel:RouterViewModel){
+    private init(_ contentView:AnyView, _ name:String="", _ previouRouterViewModel:NORouterViewModel){
         self.contentView = contentView
         self.contentName = name
         self.previouRouterViewModel = previouRouterViewModel
@@ -47,12 +47,12 @@ public class RouterViewModel:ObservableObject{
     }
     
     public func sheet(_ sheetView:AnyView, _ name:String = ""){
-        self.sheetView = AnyView(NOContentView().environmentObject(RouterViewModel(sheetView, name, self)))
+        self.sheetView = AnyView(NOContentView().environmentObject(NORouterViewModel(sheetView, name, self)))
         self.isSheetView = true
     }
     
     public func bottom(_ bottomView:AnyView, _ name:String = ""){
-        self.bottomView =  AnyView(NOContentView().environmentObject(RouterViewModel(bottomView, name,self)))
+        self.bottomView =  AnyView(NOContentView().environmentObject(NORouterViewModel(bottomView, name,self)))
         self.bottomY = 8
     }
     

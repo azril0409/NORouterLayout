@@ -9,7 +9,7 @@
 import SwiftUI
 
 public struct NOContentView: View {
-    @EnvironmentObject private var routerViewModel:RouterViewModel
+    @EnvironmentObject private var routerViewModel:NORouterViewModel
     public init(){}
     public var body: some View {
         GeometryReader { geometry in
@@ -56,7 +56,7 @@ extension Router{
 }
 
 struct MainView:View {
-    @EnvironmentObject private var routerViewModel:RouterViewModel
+    @EnvironmentObject private var routerViewModel:NORouterViewModel
     var body: some View{
         VStack{
             Spacer()
@@ -82,7 +82,7 @@ struct MainView:View {
 }
 
 struct SheetView:View {
-    @EnvironmentObject private var routerViewModel:RouterViewModel
+    @EnvironmentObject private var routerViewModel:NORouterViewModel
     var body: some View{
         VStack{
             Spacer()
@@ -105,7 +105,7 @@ struct SheetView:View {
 }
 
 struct PresentView:View {
-    @EnvironmentObject private var routerViewModel:RouterViewModel
+    @EnvironmentObject private var routerViewModel:NORouterViewModel
     var body: some View{
         VStack{
             Spacer()
@@ -128,7 +128,7 @@ struct PresentView:View {
 }
 
 struct BottomView:View {
-    @EnvironmentObject private var routerViewModel:RouterViewModel
+    @EnvironmentObject private var routerViewModel:NORouterViewModel
     var body: some View{
         GeometryReader { geometry in
             VStack{
@@ -149,7 +149,7 @@ struct BottomView:View {
 
 struct NOContentView_Previews: PreviewProvider {
     static var previews: some View {
-        let routerViewModel = RouterViewModel(Router.Main.content, "Main")
+        let routerViewModel = NORouterViewModel(Router.Main.content, "Main")
         return NOContentView().environmentObject(routerViewModel)
     }
 }
