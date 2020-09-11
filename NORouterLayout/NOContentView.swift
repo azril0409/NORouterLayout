@@ -67,7 +67,7 @@ struct MainView:View {
             }){Text("sheet SheetView")}
             Spacer()
             Button(action: {
-                self.routerViewModel.bottom(Router.Bottom.content, "Bottom")
+                self.routerViewModel.bottomSheet(Router.Bottom.content, "Bottom")
             }){Text("present BottomView")}
             Spacer()
             Button(action: {
@@ -136,7 +136,7 @@ struct BottomView:View {
                 Text("Hello, BottomView!")
                 Text("height:\(geometry.size.height)")
                 Button(action: {
-                    self.routerViewModel.bottom(Router.Bottom.content)
+                    self.routerViewModel.bottomSheet(Router.Bottom.content)
                 }){Text("bottom Main")}
                 Button(action: {
                     self.routerViewModel.dismiss()
