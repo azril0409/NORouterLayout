@@ -51,28 +51,32 @@ public class NORouterViewModel:ObservableObject{
         self.isSheetView = true
     }
     
-    public func bottom(_ bottomView:AnyView, _ name:String = ""){
+    public func bottomSheet(_ bottomView:AnyView, _ name:String = ""){
         self.bottomView =  AnyView(NOContentView().environmentObject(NORouterViewModel(bottomView, name,self)))
         self.bottomY = 8
     }
     
     public func dismiss(){
-        if viewHistory.isEmpty || self.nameList.isEmpty {
-            if let viewModel = self.previouRouterViewModel {
-                if viewModel.isSheetView {
-                    viewModel.isSheetView = false
-                    viewModel.sheetView = .none
-                }else {
-                    viewModel.bottomY = UIScreen.main.bounds.height
-                    viewModel.bottomView = .none
-                }
-            }
-            return }
+        if viewHistory.isEmpty || self.nameList.isEmpty { return }
         self.opacity = 0
         withAnimation(.linear) {
             self.opacity = 1
             self.contentView = self.viewHistory.removeLast()
             self.contentName = self.nameList.removeLast()
+        }
+    }
+    
+    public func dismissSheet(){
+        if let viewModel = self.previouRouterViewModel {
+            viewModel.isSheetView = false
+            viewModel.sheetView = .none
+        }
+    }
+    
+    public func dismissBottomSheet(){
+        if let viewModel = self.previouRouterViewModel {
+            viewModel.bottomY = UIScreen.main.bounds.height
+            viewModel.bottomView = .none
         }
     }
     
