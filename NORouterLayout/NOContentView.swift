@@ -14,7 +14,9 @@ public struct NOContentView: View {
     public var body: some View {
         GeometryReader { geometry in
             ZStack{
-                Color.clear.sheet(isPresented: self.$routerViewModel.isSheetView) {
+                Color.clear.sheet(isPresented: self.$routerViewModel.isSheetView, onDismiss: {
+                    self.routerViewModel.onDismiss()
+                }) {
                     self.routerViewModel.sheetView
                 }
                 VStack{

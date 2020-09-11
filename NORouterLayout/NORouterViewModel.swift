@@ -13,6 +13,7 @@ public class NORouterViewModel:ObservableObject{
     private var previouRouterViewModel:NORouterViewModel?
     private var viewHistory:[AnyView] = []
     private var nameList:[String] = []
+    let onDismiss:()->Void
     @Published var contentName:String
     @Published var contentView:AnyView
     @Published var opacity:Double = 1;
@@ -27,12 +28,14 @@ public class NORouterViewModel:ObservableObject{
         self.contentView = contentView
         self.contentName = name
         self.previouRouterViewModel = .none
+        self.onDismiss = {}
     }
     
-    private init(_ contentView:AnyView, _ name:String="", _ previouRouterViewModel:NORouterViewModel){
+    private init(_ contentView:AnyView, _ name:String="", _ previouRouterViewModel:NORouterViewModel, _ onDismiss:@escaping ()->Void){
         self.contentView = contentView
         self.contentName = name
         self.previouRouterViewModel = previouRouterViewModel
+        self.onDismiss = onDismiss
     }
     
     public func present(_ presentView:AnyView, _ name:String = ""){
@@ -46,13 +49,13 @@ public class NORouterViewModel:ObservableObject{
         }
     }
     
-    public func sheet(_ sheetView:AnyView, _ name:String = ""){
-        self.sheetView = AnyView(NOContentView().environmentObject(NORouterViewModel(sheetView, name, self)))
+    public func sheet(_ sheetView:AnyView, _ name:String = "",_ onDismiss:@escaping ()->Void = {}){
+        self.sheetView = AnyView(NOContentView().environmentObject(NORouterViewModel(sheetView, name, self, onDismiss)))
         self.isSheetView = true
     }
     
-    public func bottomSheet(_ bottomView:AnyView, _ name:String = ""){
-        self.bottomView =  AnyView(NOContentView().environmentObject(NORouterViewModel(bottomView, name,self)))
+    public func bottomSheet(_ bottomView:AnyView, _ name:String = "",_ onDismiss:@escaping ()->Void = {}){
+        self.bottomView =  AnyView(NOContentView().environmentObject(NORouterViewModel(bottomView, name,self, onDismiss)))
         self.bottomY = 8
     }
     
