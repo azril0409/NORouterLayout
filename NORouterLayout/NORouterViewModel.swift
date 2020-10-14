@@ -20,12 +20,16 @@ public class NORouterViewModel:ObservableObject{
     @Published var isSheetView:Bool = false
     @Published var sheetName:String? = .none
     @Published var sheetView:AnyView? = .none
-    @Published var bottomName:String? = .none
-    @Published var bottomView:AnyView? = .none
-    @Published var bottomY:CGFloat = UIScreen.main.bounds.height
     
-    public init(_ contentView:AnyView, _ name:String="") {
-        self.contentView = contentView
+    public init<Content:View>(_ contentView:Content, _ name:String="") {
+        self.contentView = AnyView(contentView)
+        self.contentName = name
+        self.previouRouterViewModel = .none
+        self.onDismiss = {}
+    }
+    
+    public init<Router:RouterType>(_ routerType:Router, _ name:String="") {
+        self.contentView = routerType.onCreateView()
         self.contentName = name
         self.previouRouterViewModel = .none
         self.onDismiss = {}
@@ -49,14 +53,25 @@ public class NORouterViewModel:ObservableObject{
         }
     }
     
+    public func present<Router:RouterType>(_ routerType:Router, _ name:String = ""){
+        self.viewHistory.append(self.contentView)
+        self.nameList.append(self.contentName)
+        self.opacity = 0
+        withAnimation(.linear) {
+            self.opacity = 1
+            self.contentView = routerType.onCreateView()
+            self.contentName = name
+        }
+    }
+    
     public func sheet(_ sheetView:AnyView, _ name:String = "",_ onDismiss:@escaping ()->Void = {}){
         self.sheetView = AnyView(NOContentView().environmentObject(NORouterViewModel(sheetView, name, self, onDismiss)))
         self.isSheetView = true
     }
     
-    public func bottomSheet(_ bottomView:AnyView, _ name:String = "",_ onDismiss:@escaping ()->Void = {}){
-        self.bottomView =  AnyView(NOContentView().environmentObject(NORouterViewModel(bottomView, name,self, onDismiss)))
-        self.bottomY = 8
+    public func sheet<Router:RouterType>(_ routerType:Router, _ name:String = "",_ onDismiss:@escaping ()->Void = {}){
+        self.sheetView = AnyView(NOContentView().environmentObject(NORouterViewModel(routerType.onCreateView(), name, self, onDismiss)))
+        self.isSheetView = true
     }
     
     public func dismiss(){
@@ -76,11 +91,12 @@ public class NORouterViewModel:ObservableObject{
         }
     }
     
-    public func dismissBottomSheet(){
-        if let viewModel = self.previouRouterViewModel {
-            viewModel.bottomY = UIScreen.main.bounds.height
-            viewModel.bottomView = .none
-        }
+    public func canDismiss() -> Bool{
+        !self.nameList.isEmpty
+    }
+    
+    public func canDismissSheet() -> Bool{
+        self.previouRouterViewModel != nil
     }
     
     public func getConentName()->String{
@@ -88,6 +104,7 @@ public class NORouterViewModel:ObservableObject{
     }
     
     public func getPreviouName() -> String? {
-        self.nameList.last
+        self.nameList.last ?? (self.previouRouterViewModel == nil ? nil : self.previouRouterViewModel?.contentName)
     }
+    
 }
