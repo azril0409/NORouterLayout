@@ -42,6 +42,10 @@ public class NORouterViewModel:ObservableObject{
         self.onDismiss = onDismiss
     }
     
+    public func present<Content:View>(_ presentView:Content, _ name:String = ""){
+        self.present(AnyView(presentView), name)
+    }
+    
     public func present(_ presentView:AnyView, _ name:String = ""){
         self.viewHistory.append(self.contentView)
         self.nameList.append(self.contentName)
@@ -64,7 +68,12 @@ public class NORouterViewModel:ObservableObject{
         }
     }
     
-    public func sheet(_ sheetView:AnyView, _ name:String = "",_ onDismiss:@escaping ()->Void = {}){
+    
+    public func sheet<Content:View>(_ presentView:Content, _ name:String = "", _ onDismiss:@escaping ()->Void = {}){
+        self.sheet(AnyView(presentView), name, onDismiss)
+    }
+    
+    public func sheet(_ sheetView:AnyView, _ name:String = "", _ onDismiss:@escaping ()->Void = {}){
         self.sheetView = AnyView(NOContentView().environmentObject(NORouterViewModel(sheetView, name, self, onDismiss)))
         self.isSheetView = true
     }

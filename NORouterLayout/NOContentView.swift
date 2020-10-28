@@ -10,7 +10,10 @@ import SwiftUI
 
 public struct NOContentView: View {
     @EnvironmentObject private var routerViewModel:NORouterViewModel
-    public init(){}
+    private let edge:Edge.Set
+    public init(_ edge:Edge.Set = .all){
+        self.edge = edge
+    }
     public var body: some View {
         GeometryReader { geometry in
             ZStack{
@@ -24,7 +27,7 @@ public struct NOContentView: View {
                 }
                 .opacity(self.routerViewModel.opacity)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .edgesIgnoringSafeArea(.all)
+                .edgesIgnoringSafeArea(edge)
             }
         }
     }

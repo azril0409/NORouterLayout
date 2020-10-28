@@ -42,6 +42,6 @@ public struct NONavigationBar: View {
         .frame(height: 40)
         .frame(maxWidth: .infinity)
         .padding(8)
-        .padding(.top, UIDevice().bangsHeight())
+        .padding(.top, UIApplication.shared.windows.first?.safeAreaInsets.top ?? 16)
     }
 }
