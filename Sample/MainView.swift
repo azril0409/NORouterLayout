@@ -11,8 +11,9 @@ import NORouterLayout
 
 struct MainView:View {
     @EnvironmentObject private var routerViewModel:NORouterViewModel
+    @State var showDetails = false
     var body: some View{
-        VStack{
+        VStack(spacing: 32.0){
             NONavigationBar{
                 Button(action: {
                     self.routerViewModel.present(Router.Present.onCreateView(), "Present")
@@ -20,14 +21,15 @@ struct MainView:View {
             }
             Spacer()
             Text("Hello, MainView!")
-            Spacer()
             Button(action: {
                 self.routerViewModel.sheet(Router.Sheet, "Sheet")
             }){Text("sheet SheetView")}
-            Spacer()
             Button(action: {
                 self.routerViewModel.present(Router.Present.onCreateView(), "Present")
             }){Text("present PresentView")}
+            Button(action: {
+                self.routerViewModel.cover(Router.Present.onCreateView())
+            }){Text("cover PresentView")}
             Spacer()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)

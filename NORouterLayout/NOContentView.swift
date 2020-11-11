@@ -11,24 +11,29 @@ import SwiftUI
 public struct NOContentView: View {
     @EnvironmentObject private var routerViewModel:NORouterViewModel
     private let edge:Edge.Set
+    
     public init(_ edge:Edge.Set = .all){
         self.edge = edge
     }
+    
     public var body: some View {
-        GeometryReader { geometry in
-            ZStack{
-                Color.clear.sheet(isPresented: self.$routerViewModel.isSheetView, onDismiss: {
-                    self.routerViewModel.onDismiss()
-                }) {
-                    self.routerViewModel.sheetView
+        ZStack{
+            Group{
+                if !self.routerViewModel.isAnimationRunning {
+                    self.routerViewModel.contentView.transition(self.routerViewModel.transition)
                 }
-                ZStack{
-                    self.routerViewModel.contentView
+            }
+            Group{
+                if self.routerViewModel.coverView != nil {
+                    self.routerViewModel.coverView.clipShape(Rectangle()).transition(self.routerViewModel.transition)
                 }
-                .opacity(self.routerViewModel.opacity)
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .edgesIgnoringSafeArea(edge)
+            }.sheet(isPresented: self.$routerViewModel.isSheetView, onDismiss: {
+                self.routerViewModel.onDismiss()
+            }) {
+                self.routerViewModel.sheetView
             }
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .edgesIgnoringSafeArea(edge)
     }
 }

@@ -12,23 +12,23 @@ import NORouterLayout
 struct PresentView:View {
     @EnvironmentObject private var routerViewModel:NORouterViewModel
     var body: some View{
-        VStack{
+        VStack(spacing: 32.0){
             NONavigationBar()
             Spacer()
             Text("Hello, PresentView!")
-            Spacer()
             Button(action: {
                 self.routerViewModel.sheet(Router.Present)
             }){Text("sheet PresentView")}
-            Spacer()
             Button(action: {
                 self.routerViewModel.present(Router.Present.onCreateView(), "Present")
             }){Text("present PresentView")}
-            Spacer()
             Button(action: {
                 self.routerViewModel.dismiss()
             }){Text("BACK \(self.routerViewModel.getPreviouName() ?? "")")}
+            Button(action: {
+                self.routerViewModel.dismissCover()
+            }){Text("close Cover")}
             Spacer()
-        }
+        }.background(Color.white)
     }
 }
