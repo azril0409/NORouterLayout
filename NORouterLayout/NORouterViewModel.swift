@@ -21,6 +21,7 @@ public class NORouterViewModel:ObservableObject{
     @Published var sheetName:String? = .none
     @Published var sheetView:AnyView? = .none
     @Published var coverView:AnyView? = .none
+    @Published var bottomSheetView:AnyView? = .none
     var transition:AnyTransition = .opacity
     
     public init<Content:View>(_ contentView:Content, _ name:String="", _ transition:AnyTransition = .opacity) {
@@ -107,6 +108,16 @@ public class NORouterViewModel:ObservableObject{
         }
     }
     
+    public func bottomSheet<Content:View>(_ bottomSheetView:Content){
+        self.bottomSheet(AnyView(bottomSheetView))
+    }
+    
+    public func bottomSheet(_ bottomSheetView:AnyView){
+        withAnimation(.linear){
+            self.bottomSheetView = bottomSheetView
+        }
+    }
+    
     public func dismiss(){
         if viewHistory.isEmpty || self.nameList.isEmpty { return }
         self.isAnimationRunning = true
@@ -127,6 +138,12 @@ public class NORouterViewModel:ObservableObject{
     public func dismissCover(){
         withAnimation{
             self.coverView = nil
+        }
+    }
+    
+    public func dismissBottomSheet(){
+        withAnimation{
+            self.bottomSheetView = nil
         }
     }
     

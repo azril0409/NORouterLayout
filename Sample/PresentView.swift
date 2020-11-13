@@ -29,6 +29,6 @@ struct PresentView:View {
                 self.routerViewModel.dismissCover()
             }){Text("close Cover")}
             Spacer()
-        }.background(Color.white)
+        }
     }
 }

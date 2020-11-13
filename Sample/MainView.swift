@@ -28,7 +28,11 @@ struct MainView:View {
                 self.routerViewModel.present(Router.Present.onCreateView(), "Present")
             }){Text("present PresentView")}
             Button(action: {
-                self.routerViewModel.cover(Router.Present.onCreateView())
+                self.routerViewModel.bottomSheet(
+                    VStack{
+                        Button(action: { self.routerViewModel.dismissBottomSheet() }){Text("TEST")
+                    }.frame(maxWidth: .infinity).frame(height: 300)}
+                )
             }){Text("cover PresentView")}
             Spacer()
         }
