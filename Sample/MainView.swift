@@ -12,6 +12,8 @@ import NORouterLayout
 struct MainView:View {
     @EnvironmentObject private var routerViewModel:NORouterViewModel
     @State var showDetails = false
+    @State private var time = Date()
+    
     var body: some View{
         VStack(spacing: 32.0){
             NONavigationBar{
@@ -29,11 +31,16 @@ struct MainView:View {
             }){Text("present PresentView")}
             Button(action: {
                 self.routerViewModel.bottomSheet(
-                    VStack{
-                        Button(action: { self.routerViewModel.dismissBottomSheet() }){Text("TEST")
-                    }.frame(maxWidth: .infinity).frame(height: 300)}
+                    ZStack{
+                        DatePicker("", selection: self.$time, displayedComponents: .date)
+                            .aspectRatio(CGSize(width: 4, height: 4), contentMode: .fit)
+                            .datePickerStyle(GraphicalDatePickerStyle())
+                            .labelsHidden()
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding()
                 )
-            }){Text("cover PresentView")}
+            }){Text("bottomSheet D")}
             Spacer()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)

@@ -42,10 +42,9 @@ public struct NOContentView: View {
                         self.routerViewModel.bottomSheetView
                             .background(GeometryReader { geometry in
                                 Color.white.preference(key: SizePreferenceKey.self, value: geometry.size)
-                            })
-                            .onPreferenceChange(SizePreferenceKey.self){ value in
+                            }.onPreferenceChange(SizePreferenceKey.self){ value in
                                 self.bottomSheetHeight = value.height
-                            }
+                            })
                             .offset(y:self.bottomSheetY)
                             .gesture(DragGesture()
                                         .onChanged{ value in
