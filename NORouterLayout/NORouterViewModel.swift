@@ -45,8 +45,16 @@ public class NORouterViewModel:ObservableObject{
         self.onDismiss = onDismiss
     }
     
+    public func present<Content:View>(_ presentView:Content, _ transition:AnyTransition = .opacity){
+        self.present(presentView, "", transition)
+    }
+    
     public func present<Content:View>(_ presentView:Content, _ name:String = "", _ transition:AnyTransition = .opacity){
         self.present(AnyView(presentView), name, transition)
+    }
+    
+    public func present(_ presentView:AnyView, _ transition:AnyTransition = .opacity){
+        self.present(presentView, "", transition)
     }
     
     public func present(_ presentView:AnyView, _ name:String = "", _ transition:AnyTransition = .opacity){
@@ -61,6 +69,10 @@ public class NORouterViewModel:ObservableObject{
         }
     }
     
+    public func present<Router:RouterType>(_ routerType:Router, _ transition:AnyTransition = .opacity){
+        self.present(routerType, "", transition)
+    }
+    
     public func present<Router:RouterType>(_ routerType:Router, _ name:String = "", _ transition:AnyTransition = .opacity){
         self.viewHistory.append(self.contentView)
         self.nameList.append(self.contentName)
@@ -73,15 +85,26 @@ public class NORouterViewModel:ObservableObject{
         }
     }
     
+    public func sheet<Content:View>(_ presentView:Content, _ transition:AnyTransition = .opacity, _ onDismiss:@escaping ()->Void = {}){
+        self.sheet(presentView, "", transition, onDismiss)
+    }
     
     public func sheet<Content:View>(_ presentView:Content, _ name:String = "", _ transition:AnyTransition = .opacity, _ onDismiss:@escaping ()->Void = {}){
         self.sheet(AnyView(presentView), name, transition, onDismiss)
+    }
+    
+    public func sheet(_ sheetView:AnyView, _ transition:AnyTransition = .opacity, _ onDismiss:@escaping ()->Void = {}){
+        self.sheet(sheetView, "", transition, onDismiss)
     }
     
     public func sheet(_ sheetView:AnyView, _ name:String = "", _ transition:AnyTransition = .opacity, _ onDismiss:@escaping ()->Void = {}){
         self.transition = transition
         self.sheetView = AnyView(NOContentView().environmentObject(NORouterViewModel(sheetView, name, self, onDismiss)))
         self.isSheetView = true
+    }
+    
+    public func sheet<Router:RouterType>(_ routerType:Router, _ transition:AnyTransition = .opacity,_ onDismiss:@escaping ()->Void = {}){
+        self.sheet(routerType, "", transition, onDismiss)
     }
     
     public func sheet<Router:RouterType>(_ routerType:Router, _ name:String = "", _ transition:AnyTransition = .opacity,_ onDismiss:@escaping ()->Void = {}){

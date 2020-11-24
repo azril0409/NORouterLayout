@@ -20,6 +20,11 @@ public struct NOContentView: View {
     
     public var body: some View {
         ZStack{
+            Color.clear.sheet(isPresented: self.$routerViewModel.isSheetView, onDismiss: {
+                self.routerViewModel.onDismiss()
+            }) {
+                self.routerViewModel.sheetView
+            }
             Group{
                 if !self.routerViewModel.isAnimationRunning {
                     self.routerViewModel.contentView.transition(self.routerViewModel.transition)
@@ -29,10 +34,6 @@ public struct NOContentView: View {
                 if self.routerViewModel.coverView != nil {
                     self.routerViewModel.coverView.clipShape(Rectangle()).background(Color.white).transition(self.routerViewModel.transition)
                 }
-            }.sheet(isPresented: self.$routerViewModel.isSheetView, onDismiss: {
-                self.routerViewModel.onDismiss()
-            }) {
-                self.routerViewModel.sheetView
             }
             Group{
                 VStack{
