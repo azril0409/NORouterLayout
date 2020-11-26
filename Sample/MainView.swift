@@ -18,7 +18,7 @@ struct MainView:View {
         VStack(spacing: 32.0){
             NONavigationBar{
                 Button(action: {
-                    self.routerViewModel.present(Router.Present.onCreateView(), "Present")
+                    self.routerViewModel.present(Router.Present.onCreateView(), "Present", .move(edge: .trailing))
                 }){Text("present PresentView")}
             }
             Spacer()
@@ -30,6 +30,17 @@ struct MainView:View {
                 self.routerViewModel.present(Router.Present.onCreateView(), "Present")
             }){Text("present PresentView")}
             Button(action: {
+                self.routerViewModel.cover(Router.Present.onCreateView())
+            }){Text("cover PresentView")}
+            Button(action: {
+                self.routerViewModel.bottomSheet(ZStack{
+                    Button(action: {
+                        self.routerViewModel.dismissBottomSheet()
+                    }, label: {
+                        Text("dismiss BottomSheet")
+                    })
+                }.frame(maxWidth: .infinity).frame(height: 200))
+                /*
                 self.routerViewModel.bottomSheet(
                     ZStack{
                         DatePicker("", selection: self.$time, displayedComponents: .date)
@@ -40,6 +51,7 @@ struct MainView:View {
                     .frame(maxWidth: .infinity)
                     .padding()
                 )
+                */
             }){Text("bottomSheet D")}
             Spacer()
         }

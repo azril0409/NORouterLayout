@@ -19,9 +19,9 @@ public class NORouterViewModel:ObservableObject{
     @Published var isAnimationRunning:Bool = false
     @Published var isSheetView:Bool = false
     @Published var sheetName:String? = .none
-    @Published var sheetView:AnyView? = .none
-    @Published var coverView:AnyView? = .none
-    @Published var bottomSheetView:AnyView? = .none
+    @Published var sheetView:AnyView? = nil
+    @Published var coverView:AnyView? = nil
+    @Published var bottomSheetView:AnyView? = nil
     var transition:AnyTransition = .opacity
     
     public init<Content:View>(_ contentView:Content, _ name:String="", _ transition:AnyTransition = .opacity) {

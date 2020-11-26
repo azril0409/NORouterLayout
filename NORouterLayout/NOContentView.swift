@@ -20,51 +20,49 @@ public struct NOContentView: View {
     
     public var body: some View {
         ZStack{
-            Color.clear.sheet(isPresented: self.$routerViewModel.isSheetView, onDismiss: {
+            Color.clear.frame(maxWidth: .infinity, maxHeight: .infinity).sheet(isPresented: self.$routerViewModel.isSheetView, onDismiss: {
                 self.routerViewModel.onDismiss()
             }) {
                 self.routerViewModel.sheetView
             }
-            Group{
+            ZStack{
                 if !self.routerViewModel.isAnimationRunning {
                     self.routerViewModel.contentView.transition(self.routerViewModel.transition)
                 }
-            }
-            Group{
-                if self.routerViewModel.coverView != nil {
-                    self.routerViewModel.coverView.clipShape(Rectangle()).background(Color.white).transition(self.routerViewModel.transition)
+            }.frame(maxWidth: .infinity, maxHeight: .infinity)
+            ZStack{
+                if self.routerViewModel.coverView != nil{
+                    self.routerViewModel.coverView.background(Color.white).clipShape(Rectangle()).transition(self.routerViewModel.transition)
+                }
+            }.frame(maxWidth: .infinity, maxHeight: .infinity)
+            VStack{
+                Spacer()
+                if self.routerViewModel.bottomSheetView != nil {
+                    self.routerViewModel.bottomSheetView
+                        .background(GeometryReader { geometry in
+                            Color.white.preference(key: SizePreferenceKey.self, value: geometry.size)
+                        }.onPreferenceChange(SizePreferenceKey.self){ value in
+                            self.bottomSheetHeight = value.height
+                        })
+                        .offset(y:self.bottomSheetY)
+                        .gesture(DragGesture()
+                                    .onChanged{ value in
+                                        if value.translation.height > 0 {
+                                            self.bottomSheetY = value.translation.height
+                                        }
+                                    }.onEnded{ value in
+                                        if self.bottomSheetHeight * 0.5 < abs(self.bottomSheetY){
+                                            self.routerViewModel.dismissBottomSheet()
+                                        }
+                                        withAnimation(.spring()){
+                                            self.bottomSheetY = 0
+                                        }
+                                    })
+                        .transition(.move(edge: .bottom))
                 }
             }
-            Group{
-                VStack{
-                    Spacer()
-                    if self.routerViewModel.bottomSheetView != nil {
-                        self.routerViewModel.bottomSheetView
-                            .background(GeometryReader { geometry in
-                                Color.white.preference(key: SizePreferenceKey.self, value: geometry.size)
-                            }.onPreferenceChange(SizePreferenceKey.self){ value in
-                                self.bottomSheetHeight = value.height
-                            })
-                            .offset(y:self.bottomSheetY)
-                            .gesture(DragGesture()
-                                        .onChanged{ value in
-                                            if value.translation.height > 0 {
-                                                self.bottomSheetY = value.translation.height
-                                            }
-                                        }.onEnded{ value in
-                                            if self.bottomSheetHeight * 0.5 < abs(self.bottomSheetY){
-                                                self.routerViewModel.dismissBottomSheet()
-                                            }
-                                            withAnimation(.spring()){
-                                                self.bottomSheetY = 0
-                                            }
-                                        })
-                            .transition(.move(edge: .bottom))
-                    }
-                }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .background(Color.black.opacity(self.routerViewModel.bottomSheetView != nil ? 0.3 : 0).transition(.opacity))
-            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(Color.black.opacity(self.routerViewModel.bottomSheetView != nil ? 0.3 : 0).transition(.opacity))
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .edgesIgnoringSafeArea(edge)
