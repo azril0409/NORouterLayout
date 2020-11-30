@@ -39,9 +39,13 @@ public struct NONavigationBar: View {
             Spacer()
             self.layer
         }
-        .frame(height: 40)
-        .frame(maxWidth: .infinity)
+        .frame(maxWidth: .infinity, minHeight: 40)
         .padding(8)
-        .padding(.top, UIApplication.shared.windows.first?.safeAreaInsets.top ?? 16)
+        .padding(.top, self.routerViewModel.canDismissSheet() ? 0 : self.safeAreaTopPadding())
     }
+    
+    private func safeAreaTopPadding() -> CGFloat{
+        UIApplication.shared.windows.first?.safeAreaInsets.top ?? 16
+    }
+    
 }

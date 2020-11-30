@@ -13,7 +13,7 @@ struct PresentView:View {
     @EnvironmentObject private var routerViewModel:NORouterViewModel
     var body: some View{
         VStack(spacing: 32.0){
-            NONavigationBar()
+            NONavigationBar().background(Color.red).accentColor(.white)
             Spacer()
             Text("Hello, PresentView!")
             Button(action: {

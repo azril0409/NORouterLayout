@@ -20,7 +20,7 @@ struct MainView:View {
                 Button(action: {
                     self.routerViewModel.present(Router.Present.onCreateView(), "Present", .move(edge: .trailing))
                 }){Text("present PresentView")}
-            }
+            }.background(Color.red)
             Spacer()
             Text("Hello, MainView!")
             Button(action: {
