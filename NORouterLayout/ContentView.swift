@@ -18,6 +18,11 @@ struct ContentView: View {
     
     public var body: some View {
         ZStack{
+            Spacer().sheet(isPresented: self.$routerViewModel.isSheetView, onDismiss: {
+                self.routerViewModel.onDismiss()
+            }) {
+                self.routerViewModel.sheetView
+            }
             if !self.routerViewModel.isAnimationRunning {
                 if self.routerViewModel.contentView != nil {
                     self.routerViewModel.contentView.transition(self.routerViewModel.transition)
@@ -27,11 +32,6 @@ struct ContentView: View {
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .sheet(isPresented: self.$routerViewModel.isSheetView, onDismiss: {
-            self.routerViewModel.onDismiss()
-        }) {
-            self.routerViewModel.sheetView
-        }
         .edgesIgnoringSafeArea(edge)
     }
 }

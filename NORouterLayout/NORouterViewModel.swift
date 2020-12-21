@@ -14,7 +14,7 @@ public class NORouterViewModel:ObservableObject{
     private var previouRouterViewModel:NORouterViewModel?
     private var viewHistory:[AnyView] = []
     private var nameList:[String] = []
-    private let environmentObjectStorage:NOEnvironmentObjectStorage
+    public let environmentObjectStorage:NOEnvironmentObjectStorage
     let onDismiss:()->Void
     @Published var contentName:String
     @Published var contentView:AnyView? = nil
