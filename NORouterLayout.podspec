@@ -16,7 +16,7 @@ Pod::Spec.new do |spec|
   #
 
   spec.name         = "NORouterLayout"
-  spec.version      = "1.1.4"
+  spec.version      = "1.1.5"
   spec.summary      = "It is an IOS app router module for swiftui"
 
   # This description is used to generate tags and improve search results.

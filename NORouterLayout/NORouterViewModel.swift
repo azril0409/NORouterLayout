@@ -27,7 +27,7 @@ public class NORouterViewModel:ObservableObject{
     var contentRouter:RouterType? = nil
     var transition:AnyTransition = .opacity
     
-    public init<Content:View>(_ contentView:Content,
+    init<Content:View>(_ contentView:Content,
                               _ name:String="",
                               _ environmentObjectStorage:NOEnvironmentObjectStorage) {
         self.contentView = AnyView(contentView)
@@ -37,7 +37,7 @@ public class NORouterViewModel:ObservableObject{
         self.onDismiss = {}
     }
     
-    public init<Router:RouterType>(_ routerType:Router,
+    init<Router:RouterType>(_ routerType:Router,
                                    _ name:String="",
                                    _ environmentObjectStorage:NOEnvironmentObjectStorage) {
         self.contentRouter = routerType
@@ -47,7 +47,7 @@ public class NORouterViewModel:ObservableObject{
         self.onDismiss = {}
     }
     
-    private init(_ contentView:AnyView,
+    init(_ contentView:AnyView,
                  _ name:String="",
                  _ environmentObjectStorage:NOEnvironmentObjectStorage,
                  _ previouRouterViewModel:NORouterViewModel,
@@ -157,6 +157,12 @@ public class NORouterViewModel:ObservableObject{
     public func bottomSheet(_ bottomSheetView:AnyView){
         withAnimation(.linear){
             self.bottomSheetView = bottomSheetView
+        }
+    }
+    
+    public func bottomSheet<Router:RouterType>(_ routerType:Router){
+        withAnimation(.linear){
+            self.bottomSheetView = routerType.onCreateView(storage: self.environmentObjectStorage)
         }
     }
     
