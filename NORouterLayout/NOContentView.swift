@@ -7,64 +7,36 @@
 //
 
 import SwiftUI
+import Combine
 
 public struct NOContentView: View {
-    @EnvironmentObject private var routerViewModel:NORouterViewModel
     private let edge:Edge.Set
-    @State private var bottomSheetY:CGFloat = 0
-    @State private var bottomSheetHeight:CGFloat = 0
+    private let routerViewModel:NORouterViewModel
+    private let storage = NOEnvironmentObjectStorage()
     
-    public init(_ edge:Edge.Set = .all){
+    public init<Content:View>(_ contentView:Content,
+                              name:String = "",
+                              edge:Edge.Set = .all){
         self.edge = edge
+        self.routerViewModel = NORouterViewModel(contentView, name, storage)
+    }
+    
+    public init<Router:RouterType>(_ routerType:Router,
+                                   name:String="",
+                                   edge:Edge.Set = .all){
+        self.edge = edge
+        self.routerViewModel = NORouterViewModel(routerType, name, storage)
     }
     
     public var body: some View {
-        ZStack{
-            Color.clear.frame(maxWidth: .infinity, maxHeight: .infinity).sheet(isPresented: self.$routerViewModel.isSheetView, onDismiss: {
-                self.routerViewModel.onDismiss()
-            }) {
-                self.routerViewModel.sheetView
-            }
-            ZStack{
-                if !self.routerViewModel.isAnimationRunning {
-                    self.routerViewModel.contentView.transition(self.routerViewModel.transition)
-                }
-            }.frame(maxWidth: .infinity, maxHeight: .infinity)
-            ZStack{
-                if self.routerViewModel.coverView != nil{
-                    self.routerViewModel.coverView.background(Color.white).clipShape(Rectangle()).transition(self.routerViewModel.transition)
-                }
-            }.frame(maxWidth: .infinity, maxHeight: .infinity)
-            VStack{
-                Spacer()
-                if self.routerViewModel.bottomSheetView != nil {
-                    self.routerViewModel.bottomSheetView
-                        .background(GeometryReader { geometry in
-                            Color.white.preference(key: SizePreferenceKey.self, value: geometry.size)
-                        }.onPreferenceChange(SizePreferenceKey.self){ value in
-                            self.bottomSheetHeight = value.height
-                        })
-                        .offset(y:self.bottomSheetY)
-                        .gesture(DragGesture()
-                                    .onChanged{ value in
-                                        if value.translation.height > 0 {
-                                            self.bottomSheetY = value.translation.height
-                                        }
-                                    }.onEnded{ value in
-                                        if self.bottomSheetHeight * 0.5 < abs(self.bottomSheetY){
-                                            self.routerViewModel.dismissBottomSheet()
-                                        }
-                                        withAnimation(.spring()){
-                                            self.bottomSheetY = 0
-                                        }
-                                    })
-                        .transition(.move(edge: .bottom))
-                }
-            }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(Color.black.opacity(self.routerViewModel.bottomSheetView != nil ? 0.3 : 0).transition(.opacity))
+        ContentView(self.edge).environmentObject(self.routerViewModel)
+    }
+    
+    public func injectEnvironmentObject<T:ObservableObject>(_ object:T) -> NOContentView{
+        storage.injectEnvironmentObject(object: object)
+        if routerViewModel.contentView != nil {
+            routerViewModel.contentView = AnyView(routerViewModel.contentView.environmentObject(object))
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .edgesIgnoringSafeArea(edge)
+        return self
     }
 }

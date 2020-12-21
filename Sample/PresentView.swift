@@ -11,16 +11,17 @@ import NORouterLayout
 
 struct PresentView:View {
     @EnvironmentObject private var routerViewModel:NORouterViewModel
+    @EnvironmentObject private var test:TestObservableObject
     var body: some View{
         VStack(spacing: 32.0){
-            NONavigationBar().background(Color.red).accentColor(.white)
+            NONavigationBar()
             Spacer()
-            Text("Hello, PresentView!")
+            Text("Hello, PresentView!\nHello, \(String(describing: self.test))")
             Button(action: {
                 self.routerViewModel.sheet(Router.Present)
             }){Text("sheet PresentView")}
             Button(action: {
-                self.routerViewModel.present(Router.Present.onCreateView(), "Present")
+                self.routerViewModel.present(Router.Present, "Present")
             }){Text("present PresentView")}
             Button(action: {
                 self.routerViewModel.dismiss()

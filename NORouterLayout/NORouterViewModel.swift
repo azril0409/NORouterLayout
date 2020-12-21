@@ -8,43 +8,62 @@
 
 import SwiftUI
 import UIKit
+import Combine
 
 public class NORouterViewModel:ObservableObject{
     private var previouRouterViewModel:NORouterViewModel?
     private var viewHistory:[AnyView] = []
     private var nameList:[String] = []
+    private let environmentObjectStorage:NOEnvironmentObjectStorage
     let onDismiss:()->Void
     @Published var contentName:String
-    @Published var contentView:AnyView
+    @Published var contentView:AnyView? = nil
     @Published var isAnimationRunning:Bool = false
     @Published var isSheetView:Bool = false
     @Published var sheetName:String? = .none
     @Published var sheetView:AnyView? = nil
     @Published var coverView:AnyView? = nil
     @Published var bottomSheetView:AnyView? = nil
+    var contentRouter:RouterType? = nil
     var transition:AnyTransition = .opacity
     
-    public init<Content:View>(_ contentView:Content, _ name:String="", _ transition:AnyTransition = .opacity) {
+    public init<Content:View>(_ contentView:Content,
+                              _ name:String="",
+                              _ environmentObjectStorage:NOEnvironmentObjectStorage) {
         self.contentView = AnyView(contentView)
         self.contentName = name
+        self.environmentObjectStorage = environmentObjectStorage
         self.previouRouterViewModel = .none
         self.onDismiss = {}
     }
     
-    public init<Router:RouterType>(_ routerType:Router, _ name:String="", _ transition:AnyTransition = .opacity) {
-        self.contentView = routerType.onCreateView()
+    public init<Router:RouterType>(_ routerType:Router,
+                                   _ name:String="",
+                                   _ environmentObjectStorage:NOEnvironmentObjectStorage) {
+        self.contentRouter = routerType
         self.contentName = name
+        self.environmentObjectStorage = environmentObjectStorage
         self.previouRouterViewModel = .none
         self.onDismiss = {}
     }
     
-    private init(_ contentView:AnyView, _ name:String="", _ previouRouterViewModel:NORouterViewModel, _ onDismiss:@escaping ()->Void){
+    private init(_ contentView:AnyView,
+                 _ name:String="",
+                 _ environmentObjectStorage:NOEnvironmentObjectStorage,
+                 _ previouRouterViewModel:NORouterViewModel,
+                 _ onDismiss:@escaping ()->Void){
         self.contentView = contentView
         self.contentName = name
+        self.environmentObjectStorage = environmentObjectStorage
         self.previouRouterViewModel = previouRouterViewModel
         self.onDismiss = onDismiss
     }
     
+    func getContentViewByRouter() -> AnyView {
+        self.contentView = self.contentRouter?.onCreateView(storage: self.environmentObjectStorage) ?? AnyView(EmptyView())
+        return self.contentView!
+    }
+
     public func present<Content:View>(_ presentView:Content, _ transition:AnyTransition = .opacity){
         self.present(presentView, "", transition)
     }
@@ -58,7 +77,7 @@ public class NORouterViewModel:ObservableObject{
     }
     
     public func present(_ presentView:AnyView, _ name:String = "", _ transition:AnyTransition = .opacity){
-        self.viewHistory.append(self.contentView)
+        self.viewHistory.append(self.contentView!)
         self.nameList.append(self.contentName)
         self.isAnimationRunning = true
         self.transition = transition
@@ -74,13 +93,13 @@ public class NORouterViewModel:ObservableObject{
     }
     
     public func present<Router:RouterType>(_ routerType:Router, _ name:String = "", _ transition:AnyTransition = .opacity){
-        self.viewHistory.append(self.contentView)
+        self.viewHistory.append(self.contentView!)
         self.nameList.append(self.contentName)
         self.isAnimationRunning = true
         self.transition = transition
         withAnimation(.linear) {
             self.isAnimationRunning = false
-            self.contentView = routerType.onCreateView()
+            self.contentView = routerType.onCreateView(storage: self.environmentObjectStorage)
             self.contentName = name
         }
     }
@@ -99,7 +118,7 @@ public class NORouterViewModel:ObservableObject{
     
     public func sheet(_ sheetView:AnyView, _ name:String = "", _ transition:AnyTransition = .opacity, _ onDismiss:@escaping ()->Void = {}){
         self.transition = transition
-        self.sheetView = AnyView(NOContentView().environmentObject(NORouterViewModel(sheetView, name, self, onDismiss)))
+        self.sheetView = AnyView(ContentView().environmentObject(NORouterViewModel(sheetView, name, self.environmentObjectStorage, self, onDismiss)))
         self.isSheetView = true
     }
     
@@ -109,7 +128,7 @@ public class NORouterViewModel:ObservableObject{
     
     public func sheet<Router:RouterType>(_ routerType:Router, _ name:String = "", _ transition:AnyTransition = .opacity,_ onDismiss:@escaping ()->Void = {}){
         self.transition = transition
-        self.sheetView = AnyView(NOContentView().environmentObject(NORouterViewModel(routerType.onCreateView(), name, self, onDismiss)))
+        self.sheetView = AnyView(ContentView().environmentObject(NORouterViewModel(routerType.onCreateView(storage: self.environmentObjectStorage), name, self.environmentObjectStorage, self, onDismiss)))
         self.isSheetView = true
     }
     
@@ -127,7 +146,7 @@ public class NORouterViewModel:ObservableObject{
     public func cover<Router:RouterType>(_ routerType:Router, _ transition:AnyTransition = .move(edge: .bottom)){
         self.transition = transition
         withAnimation(.linear){
-            self.coverView = routerType.onCreateView()
+            self.coverView = routerType.onCreateView(storage: self.environmentObjectStorage)
         }
     }
     

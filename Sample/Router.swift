@@ -16,11 +16,12 @@ enum Router{
 }
 
 extension Router:RouterType{
-    func onCreateView() -> AnyView {
+    func onCreateView(storage: NOEnvironmentObjectStorage) -> AnyView {
+        let object = storage.getEnvironmentObject(type: TestObservableObject.self)
         switch self {
-        case .Main: return AnyView(MainView())
+        case .Main: return AnyView(MainView().environmentObject(object!))
         case .Sheet: return AnyView(SheetView())
-        case .Present: return AnyView(PresentView())
+        case .Present: return AnyView(PresentView().environmentObject(object!))
         }
     }
 }

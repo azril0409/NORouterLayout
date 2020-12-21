@@ -13,7 +13,11 @@ import NORouterLayout
 struct SampleApp: App {
     var body: some Scene {
         WindowGroup {
-            NOContentView().environmentObject(NORouterViewModel(Router.Main, "Main"))
+            NOContentView(Router.Main).injectEnvironmentObject(TestObservableObject())
         }
     }
+}
+
+class TestObservableObject:ObservableObject{
+    
 }

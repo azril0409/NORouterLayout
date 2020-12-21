@@ -10,14 +10,27 @@ import SwiftUI
 
 public struct NONavigationBar: View {
     @EnvironmentObject private var routerViewModel:NORouterViewModel
-    private let layer:AnyView
+    private let labelLayer:AnyView
+    private let menuLayer:AnyView
     
     public init(){
-        layer = AnyView(EmptyView())
+        self.labelLayer = AnyView(EmptyView())
+        self.menuLayer = AnyView(EmptyView())
     }
     
     public init<BarButtonLayer:View>(@ViewBuilder layer:@escaping ()->BarButtonLayer) {
-        self.layer = AnyView(layer())
+        self.labelLayer = AnyView(EmptyView())
+        self.menuLayer = AnyView(layer())
+    }
+    
+    public init<LabelLayer:View>(@ViewBuilder label:@escaping ()->LabelLayer) {
+        self.labelLayer = AnyView(label())
+        self.menuLayer = AnyView(EmptyView())
+    }
+    
+    public init<LabelLayer:View, BarButtonLayer:View>(@ViewBuilder label:@escaping ()->LabelLayer, @ViewBuilder layer:@escaping ()->BarButtonLayer) {
+        self.labelLayer = AnyView(label())
+        self.menuLayer = AnyView(layer())
     }
     
     public var body: some View {
@@ -32,12 +45,13 @@ public struct NONavigationBar: View {
                 }, label: {
                     HStack(alignment: .center, spacing: 8){
                         Image(systemName: "arrow.left")
-                        Text(routerViewModel.getPreviouName() ?? "")
+                        Text(routerViewModel.getPreviouName() ?? "").font(.system(size: 24)).minimumScaleFactor(0.5)
                     }
                 })
-            } 
+            }
+            self.labelLayer
             Spacer()
-            self.layer
+            self.menuLayer
         }
         .frame(maxWidth: .infinity, minHeight: 40)
         .padding(8)
@@ -49,3 +63,4 @@ public struct NONavigationBar: View {
     }
     
 }
+

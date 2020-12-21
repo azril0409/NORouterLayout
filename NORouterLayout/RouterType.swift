@@ -9,5 +9,5 @@
 import SwiftUI
 
 public protocol RouterType{
-    func onCreateView() -> AnyView
+    func onCreateView(storage:NOEnvironmentObjectStorage) -> AnyView
 }
