@@ -60,8 +60,10 @@ public struct NOContentView: View {
         return self
     }
     
-    public func routerViewModel(_ sync:(NORouterViewModel)->Void) -> NOContentView{
-        sync(self.routerViewModel)
+    public func routerViewModel(_ sync:@escaping(NORouterViewModel)->Void) -> NOContentView{
+        DispatchQueue.main.async {
+            sync(self.routerViewModel)
+        }
         return self
     }
 }

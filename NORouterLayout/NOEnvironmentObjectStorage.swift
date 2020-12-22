@@ -13,7 +13,7 @@ public class NOEnvironmentObjectStorage{
     init(){}
     
     func injectEnvironmentObject<T:ObservableObject>(object:T){
-        let type = String(describing:object).components(separatedBy: ".").last!
+        let type = String(describing:object).components(separatedBy: ".").last!.components(separatedBy: ":").first!
         objects[type] = object
     }
     
