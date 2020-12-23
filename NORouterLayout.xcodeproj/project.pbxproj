@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		74354A9A2592CF6200219FBC /* NORouterLayout.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 74D234C8250868210055866F /* NORouterLayout.framework */; };
+		74354A9B2592CF6200219FBC /* NORouterLayout.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 74D234C8250868210055866F /* NORouterLayout.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		7445991E2536E2F10015FDC7 /* SampleApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7445991D2536E2F10015FDC7 /* SampleApp.swift */; };
 		744599202536E2F10015FDC7 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7445991F2536E2F10015FDC7 /* ContentView.swift */; };
 		744599222536E2F40015FDC7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 744599212536E2F40015FDC7 /* Assets.xcassets */; };
@@ -39,6 +41,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		74354A9C2592CF6200219FBC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 74D234BF250868210055866F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 74D234C7250868210055866F;
+			remoteInfo = NORouterLayout;
+		};
 		744599452536E48E0015FDC7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 74D234BF250868210055866F /* Project object */;
@@ -49,6 +58,17 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		74354A9E2592CF6200219FBC /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				74354A9B2592CF6200219FBC /* NORouterLayout.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		744599472536E48E0015FDC7 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -111,6 +131,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				74354A9A2592CF6200219FBC /* NORouterLayout.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -259,10 +280,12 @@
 				74568B792590A11000B08FD0 /* Sources */,
 				74568B7A2590A11000B08FD0 /* Frameworks */,
 				74568B7B2590A11000B08FD0 /* Resources */,
+				74354A9E2592CF6200219FBC /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				74354A9D2592CF6200219FBC /* PBXTargetDependency */,
 			);
 			name = Sample2;
 			productName = Sample2;
@@ -404,6 +427,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		74354A9D2592CF6200219FBC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 74D234C7250868210055866F /* NORouterLayout */;
+			targetProxy = 74354A9C2592CF6200219FBC /* PBXContainerItemProxy */;
+		};
 		744599462536E48E0015FDC7 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 74D234C7250868210055866F /* NORouterLayout */;
@@ -650,7 +678,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.7;
+				MARKETING_VERSION = 1.1.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.neetoffice.widget.NORouterLayout;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -678,7 +706,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.7;
+				MARKETING_VERSION = 1.1.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.neetoffice.widget.NORouterLayout;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;

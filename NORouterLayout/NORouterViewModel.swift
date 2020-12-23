@@ -81,7 +81,7 @@ public class NORouterViewModel:ObservableObject{
         self.nameList.append(self.contentName)
         self.isAnimationRunning = true
         self.transition = transition
-        withAnimation(.linear) {
+        withAnimation(.spring(response: 0.35, dampingFraction: 0.72, blendDuration: 0)) {
             self.isAnimationRunning = false
             self.contentView = presentView
             self.contentName = name
@@ -97,7 +97,7 @@ public class NORouterViewModel:ObservableObject{
         self.nameList.append(self.contentName)
         self.isAnimationRunning = true
         self.transition = transition
-        withAnimation(.linear) {
+        withAnimation(.spring(response: 0.35, dampingFraction: 0.72, blendDuration: 0)) {
             self.isAnimationRunning = false
             self.contentView = routerType.onCreateView(storage: self.environmentObjectStorage)
             self.contentName = name
@@ -138,14 +138,14 @@ public class NORouterViewModel:ObservableObject{
     
     public func cover(_ coverView:AnyView, _ transition:AnyTransition = .move(edge: .bottom)){
         self.transition = transition
-        withAnimation(.linear){
+        withAnimation(.spring(response: 0.35, dampingFraction: 0.72, blendDuration: 0)) {
             self.coverView = coverView
         }
     }
     
     public func cover<Router:RouterType>(_ routerType:Router, _ transition:AnyTransition = .move(edge: .bottom)){
         self.transition = transition
-        withAnimation(.linear){
+        withAnimation(.spring(response: 0.35, dampingFraction: 0.72, blendDuration: 0)) {
             self.coverView = routerType.onCreateView(storage: self.environmentObjectStorage)
         }
     }
@@ -155,13 +155,13 @@ public class NORouterViewModel:ObservableObject{
     }
     
     public func bottomSheet(_ bottomSheetView:AnyView){
-        withAnimation(.linear){
+        withAnimation(.spring()) {
             self.bottomSheetView = bottomSheetView
         }
     }
     
     public func bottomSheet<Router:RouterType>(_ routerType:Router){
-        withAnimation(.linear){
+        withAnimation(.spring(response: 0.35, dampingFraction: 0.72, blendDuration: 0)) {
             self.bottomSheetView = routerType.onCreateView(storage: self.environmentObjectStorage)
         }
     }
@@ -169,7 +169,7 @@ public class NORouterViewModel:ObservableObject{
     public func dismiss(){
         if viewHistory.isEmpty || self.nameList.isEmpty { return }
         self.isAnimationRunning = true
-        withAnimation(.linear) {
+        withAnimation(.spring(response: 0.35, dampingFraction: 0.72, blendDuration: 0)) {
             self.isAnimationRunning = false
             self.contentView = self.viewHistory.removeLast()
             self.contentName = self.nameList.removeLast()
@@ -184,13 +184,13 @@ public class NORouterViewModel:ObservableObject{
     }
     
     public func dismissCover(){
-        withAnimation{
+        withAnimation(.spring(response: 0.35, dampingFraction: 0.72, blendDuration: 0)) {
             self.coverView = nil
         }
     }
     
     public func dismissBottomSheet(){
-        withAnimation{
+        withAnimation(.spring(response: 0.35, dampingFraction: 0.72, blendDuration: 0)) {
             self.bottomSheetView = nil
         }
     }
@@ -216,3 +216,4 @@ public class NORouterViewModel:ObservableObject{
     }
     
 }
+
