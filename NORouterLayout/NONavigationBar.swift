@@ -35,11 +35,13 @@ public struct NONavigationBar: View {
     
     public var body: some View {
         HStack{
-            if self.routerViewModel.getPreviouName() != nil {
+            if self.routerViewModel.canDismissCover() || self.routerViewModel.canDismiss() || self.routerViewModel.canDismissSheet() {
                 Button(action: {
-                    if self.routerViewModel.canDismiss(){
+                    if self.routerViewModel.canDismissCover(){
+                        self.routerViewModel.dismissCover()
+                    }else if self.routerViewModel.canDismiss() {
                         self.routerViewModel.dismiss()
-                    }else{
+                    }else if self.routerViewModel.canDismissSheet() {
                         self.routerViewModel.dismissSheet()
                     }
                 }, label: {
