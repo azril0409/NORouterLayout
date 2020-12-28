@@ -86,6 +86,9 @@ public class NORouterViewModel:ObservableObject{
     
     func injectEnvironmentObject<T:ObservableObject>(_ object:T){
         self.storage.injectEnvironmentObject(object: object)
+        if let contentView = self.contentView {
+            self.contentView = AnyView(contentView.environmentObject(object))
+        }
     }
 
     public func present<Content:View>(_ presentView:Content, _ transition:AnyTransition = .opacity){
