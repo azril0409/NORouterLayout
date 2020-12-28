@@ -86,7 +86,7 @@ public class NORouterViewModel:ObservableObject{
     
     func injectEnvironmentObject<T:ObservableObject>(_ object:T){
         self.storage.injectEnvironmentObject(object: object)
-        if let contentView = self.contentView {
+        if let contentView = self.contentView, delegate == nil {
             self.contentView = AnyView(contentView.environmentObject(object))
         }
     }
