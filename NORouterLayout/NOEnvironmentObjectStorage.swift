@@ -9,6 +9,7 @@
 import SwiftUI
 
 public class NOEnvironmentObjectStorage{
+    typealias T = ObservableObject
     var objects:[String:AnyObject] = [:]
     init(){}
     
@@ -17,7 +18,7 @@ public class NOEnvironmentObjectStorage{
         objects[type] = object
     }
     
-    public func getEnvironmentObject<T>(type:T.Type) -> T?{
+    public func getEnvironmentObject<T:ObservableObject>(type:T.Type) -> T?{
         let type = String(describing:type)
         let object = objects[type]
         return object as? T

@@ -12,51 +12,45 @@ import Combine
 public struct NOContentView: View {
     private let edge:Edge.Set
     private let routerViewModel:NORouterViewModel
-    private let storage:NOEnvironmentObjectStorage
     
     public init<Content:View>(_ contentView:Content,
                               name:String = "",
-                              edge:Edge.Set = .all){
+                              edge:Edge.Set = .all,
+                              delegate:NORouterDelegate? = nil){
         self.edge = edge
-        self.storage = NOEnvironmentObjectStorage()
-        self.routerViewModel = NORouterViewModel(contentView, name, storage)
+        self.routerViewModel = NORouterViewModel(contentView: contentView, name: name, delegate: delegate)
     }
     
     public init<Content:View>(_ contentView:Content,
                               name:String = "",
                               edge:Edge.Set = .all,
-                              storage:NOEnvironmentObjectStorage){
+                              routerViewModel:NORouterViewModel){
         self.edge = edge
-        self.storage = storage
-        self.routerViewModel = NORouterViewModel(contentView, name, storage)
+        self.routerViewModel = NORouterViewModel(contentView: contentView, name: name, delegate: routerViewModel.delegate, storage: routerViewModel.storage)
     }
     
     public init<Router:RouterType>(_ routerType:Router,
-                                   name:String="",
-                                   edge:Edge.Set = .all){
+                                   name:String = "",
+                                   edge:Edge.Set = .all,
+                                   delegate:NORouterDelegate? = nil){
         self.edge = edge
-        self.storage = NOEnvironmentObjectStorage()
-        self.routerViewModel = NORouterViewModel(routerType, name, storage)
+        self.routerViewModel = NORouterViewModel(routerType: routerType, name: name, delegate: delegate)
     }
     
     public init<Router:RouterType>(_ routerType:Router,
                                    name:String="",
                                    edge:Edge.Set = .all,
-                                   storage:NOEnvironmentObjectStorage){
+                                   routerViewModel:NORouterViewModel){
         self.edge = edge
-        self.storage = storage
-        self.routerViewModel = NORouterViewModel(routerType, name, storage)
+        self.routerViewModel = NORouterViewModel(routerType: routerType, name: name, delegate: routerViewModel.delegate, storage: routerViewModel.storage)
     }
     
     public var body: some View {
-        ContentView(self.edge).environmentObject(self.routerViewModel)
+        SceneView().edgesIgnoringSafeArea(edge).environmentObject(self.routerViewModel)
     }
     
     public func injectEnvironmentObject<T:ObservableObject>(_ object:T) -> NOContentView{
-        storage.injectEnvironmentObject(object: object)
-        if routerViewModel.contentView != nil {
-            routerViewModel.contentView = AnyView(routerViewModel.contentView.environmentObject(object))
-        }
+        routerViewModel.injectEnvironmentObject(object)
         return self
     }
     

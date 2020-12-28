@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7426312C259967200086A2D2 /* NORouterDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7426312B2599671F0086A2D2 /* NORouterDelegate.swift */; };
+		7426312F259969740086A2D2 /* NORouterSubscriber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7426312E259969740086A2D2 /* NORouterSubscriber.swift */; };
 		74354A9A2592CF6200219FBC /* NORouterLayout.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 74D234C8250868210055866F /* NORouterLayout.framework */; };
 		74354A9B2592CF6200219FBC /* NORouterLayout.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 74D234C8250868210055866F /* NORouterLayout.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		7445991E2536E2F10015FDC7 /* SampleApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7445991D2536E2F10015FDC7 /* SampleApp.swift */; };
@@ -37,7 +39,7 @@
 		74E981F1258CA5210046B3A9 /* NOEnvironmentObjectStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74E981F0258CA5210046B3A9 /* NOEnvironmentObjectStorage.swift */; };
 		74E981F4258CAEC00046B3A9 /* NORouterOverModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74E981F3258CAEC00046B3A9 /* NORouterOverModifier.swift */; };
 		74EDA3762536D8520063F7C2 /* NONavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EDA3752536D8520063F7C2 /* NONavigationBar.swift */; };
-		74F6BFD7257E1017009D42C1 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F6BFD6257E1017009D42C1 /* ContentView.swift */; };
+		74F6BFD7257E1017009D42C1 /* SceneView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F6BFD6257E1017009D42C1 /* SceneView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -83,6 +85,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		7426312B2599671F0086A2D2 /* NORouterDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NORouterDelegate.swift; sourceTree = "<group>"; };
+		7426312E259969740086A2D2 /* NORouterSubscriber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NORouterSubscriber.swift; sourceTree = "<group>"; };
 		7445991B2536E2F00015FDC7 /* Sample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Sample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7445991D2536E2F10015FDC7 /* SampleApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleApp.swift; sourceTree = "<group>"; };
 		7445991F2536E2F10015FDC7 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -115,7 +119,7 @@
 		74E981F0258CA5210046B3A9 /* NOEnvironmentObjectStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NOEnvironmentObjectStorage.swift; sourceTree = "<group>"; };
 		74E981F3258CAEC00046B3A9 /* NORouterOverModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NORouterOverModifier.swift; sourceTree = "<group>"; };
 		74EDA3752536D8520063F7C2 /* NONavigationBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NONavigationBar.swift; sourceTree = "<group>"; };
-		74F6BFD6257E1017009D42C1 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		74F6BFD6257E1017009D42C1 /* SceneView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -227,7 +231,7 @@
 			isa = PBXGroup;
 			children = (
 				74D234CC250868210055866F /* Info.plist */,
-				74F6BFD6257E1017009D42C1 /* ContentView.swift */,
+				74F6BFD6257E1017009D42C1 /* SceneView.swift */,
 				74D234D3250869B60055866F /* NOContentView.swift */,
 				74E981F0258CA5210046B3A9 /* NOEnvironmentObjectStorage.swift */,
 				74EDA3752536D8520063F7C2 /* NONavigationBar.swift */,
@@ -236,6 +240,8 @@
 				74D234D7250876670055866F /* NORouterViewModel.swift */,
 				748A59342536C2D800983267 /* RouterType.swift */,
 				74E85BB8255E22B800FB1A65 /* SizePreferenceKey.swift */,
+				7426312B2599671F0086A2D2 /* NORouterDelegate.swift */,
+				7426312E259969740086A2D2 /* NORouterSubscriber.swift */,
 			);
 			path = NORouterLayout;
 			sourceTree = "<group>";
@@ -413,11 +419,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7426312C259967200086A2D2 /* NORouterDelegate.swift in Sources */,
 				74E981F1258CA5210046B3A9 /* NOEnvironmentObjectStorage.swift in Sources */,
 				74D234D8250876670055866F /* NORouterViewModel.swift in Sources */,
+				7426312F259969740086A2D2 /* NORouterSubscriber.swift in Sources */,
 				74E981F4258CAEC00046B3A9 /* NORouterOverModifier.swift in Sources */,
 				74D234D4250869B60055866F /* NOContentView.swift in Sources */,
-				74F6BFD7257E1017009D42C1 /* ContentView.swift in Sources */,
+				74F6BFD7257E1017009D42C1 /* SceneView.swift in Sources */,
 				748A59352536C2D800983267 /* RouterType.swift in Sources */,
 				74EDA3762536D8520063F7C2 /* NONavigationBar.swift in Sources */,
 				74E85BB9255E22B900FB1A65 /* SizePreferenceKey.swift in Sources */,
@@ -678,7 +686,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.9;
+				MARKETING_VERSION = 1.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.neetoffice.widget.NORouterLayout;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -706,7 +714,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.9;
+				MARKETING_VERSION = 1.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.neetoffice.widget.NORouterLayout;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;

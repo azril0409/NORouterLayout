@@ -8,14 +8,9 @@
 
 import SwiftUI
 
-struct ContentView: View {
+struct SceneView: View {
     @EnvironmentObject private var routerViewModel:NORouterViewModel
-    private let edge:Edge.Set
-    
-    public init(_ edge:Edge.Set = .all){
-        self.edge = edge
-    }
-    
+
     public var body: some View {
         ZStack{
             Spacer().sheet(isPresented: self.$routerViewModel.isSheetView, onDismiss: {
@@ -24,14 +19,13 @@ struct ContentView: View {
                 self.routerViewModel.sheetView
             }
             if !self.routerViewModel.isAnimationRunning {
-                if self.routerViewModel.contentView != nil {
-                    self.routerViewModel.contentView.transition(self.routerViewModel.transition)
-                }else {
-                    self.routerViewModel.getContentViewByRouter().transition(self.routerViewModel.transition)
+                if let sceneView = self.routerViewModel.sceneView {
+                    sceneView.transition(self.routerViewModel.transition)
+                }else{
+                    self.routerViewModel.getContentView().transition(self.routerViewModel.transition)
                 }
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .edgesIgnoringSafeArea(edge)
     }
 }
