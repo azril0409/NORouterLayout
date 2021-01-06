@@ -220,7 +220,7 @@ public class NORouterViewModel:ObservableObject{
     
     public func dismissCover(){
         withAnimation(.spring(response: 0.35, dampingFraction: 0.72, blendDuration: 0)) {
-            self.coverView = nil
+            self.previouRouterViewModel?.coverView = nil
         }
     }
     
@@ -239,7 +239,7 @@ public class NORouterViewModel:ObservableObject{
     }
     
     public func canDismissCover() -> Bool{
-        self.coverView != nil
+        self.previouRouterViewModel?.coverView != nil
     }
     
     public func getConentName()->String{

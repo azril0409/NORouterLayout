@@ -19,7 +19,13 @@ public struct NORouterOverModifier:ViewModifier{
         return content
             .overlay(ZStack{
                 if self.routerViewModel.coverView != nil{
-                    self.routerViewModel.coverView.background(Color.white).clipShape(Rectangle()).transition(self.routerViewModel.transition)
+                    SceneView().environmentObject(NORouterViewModel(contentView: self.routerViewModel.coverView!,
+                                                                    name: self.routerViewModel.contentName,
+                                                                    delegate: self.routerViewModel.delegate,
+                                                                    previouRouterViewModel: self.routerViewModel,
+                                                                    storage: self.routerViewModel.storage,
+                                                                    onDismiss: self.routerViewModel.onDismiss))
+                    .background(Color.white).clipShape(Rectangle()).transition(self.routerViewModel.transition)
                 }
             }.frame(maxWidth: .infinity, maxHeight: .infinity))
             .overlay(VStack{
