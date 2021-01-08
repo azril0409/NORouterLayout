@@ -24,6 +24,7 @@ public struct NORouterOverModifier:ViewModifier{
                                                                     delegate: self.routerViewModel.delegate,
                                                                     previouRouterViewModel: self.routerViewModel,
                                                                     storage: self.routerViewModel.storage,
+                                                                    estimateBarHeight: self.routerViewModel.estimateBarHeight,
                                                                     onDismiss: self.routerViewModel.onDismiss))
                     .background(Color.white).clipShape(Rectangle()).transition(self.routerViewModel.transition)
                 }

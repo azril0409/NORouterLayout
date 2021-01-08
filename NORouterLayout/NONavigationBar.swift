@@ -37,6 +37,9 @@ public struct NONavigationBar: View {
         HStack{
             if self.routerViewModel.canDismissCover() || self.routerViewModel.canDismiss() || self.routerViewModel.canDismissSheet() {
                 Button(action: {
+                    print("canDismissCover: \(self.routerViewModel.canDismiss())")
+                    print("canDismissCover: \(self.routerViewModel.canDismissCover())")
+                    print("canDismissSheet: \(self.routerViewModel.canDismissSheet())")
                     if self.routerViewModel.canDismiss(){
                         self.routerViewModel.dismiss()
                     }else if self.routerViewModel.canDismissCover() {
@@ -57,7 +60,11 @@ public struct NONavigationBar: View {
         }
         .frame(maxWidth: .infinity, minHeight: 40)
         .padding(8)
-        .padding(.top, self.routerViewModel.canDismissSheet() ? 0 : self.safeAreaTopPadding())
+        .padding(.top, self.routerViewModel.estimateBarHeight ? self.safeAreaTopPadding() : 0)
+        .onAppear(perform: {
+            print("canDismissCover: \(self.routerViewModel.canDismissCover())")
+            print("safeAreaTopPadding: \(self.safeAreaTopPadding())")
+        })
     }
     
     private func safeAreaTopPadding() -> CGFloat{

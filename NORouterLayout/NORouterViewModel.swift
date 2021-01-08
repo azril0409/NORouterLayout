@@ -17,6 +17,7 @@ public class NORouterViewModel:ObservableObject{
     public let delegate:NORouterDelegate?
     let onDismiss:()->Void
     let storage:NOEnvironmentObjectStorage
+    let estimateBarHeight:Bool
     @Published var sceneView:AnyView? = nil
     @Published var contentName:String
     @Published var isAnimationRunning:Bool = false
@@ -32,25 +33,29 @@ public class NORouterViewModel:ObservableObject{
     init<Content:View>(contentView:Content,
                        name:String = "",
                        delegate:NORouterDelegate?,
-                       storage:NOEnvironmentObjectStorage = NOEnvironmentObjectStorage()) {
+                       storage:NOEnvironmentObjectStorage = NOEnvironmentObjectStorage(),
+                       estimateBarHeight:Bool) {
         self.contentView = AnyView(contentView)
         self.contentName = name
         self.delegate = delegate
         self.previouRouterViewModel = .none
         self.onDismiss = {}
         self.storage = storage
+        self.estimateBarHeight = estimateBarHeight
     }
     
     init<Router:RouterType>(routerType:Router,
                             name:String = "",
                             delegate:NORouterDelegate?,
-                            storage:NOEnvironmentObjectStorage = NOEnvironmentObjectStorage()) {
+                            storage:NOEnvironmentObjectStorage = NOEnvironmentObjectStorage(),
+                            estimateBarHeight:Bool) {
         self.contentRouter = routerType
         self.contentName = name
         self.delegate = delegate
         self.previouRouterViewModel = .none
         self.onDismiss = {}
         self.storage = storage
+        self.estimateBarHeight = estimateBarHeight
     }
     
     init(contentView:AnyView,
@@ -58,6 +63,7 @@ public class NORouterViewModel:ObservableObject{
          delegate:NORouterDelegate?,
          previouRouterViewModel:NORouterViewModel,
          storage:NOEnvironmentObjectStorage = NOEnvironmentObjectStorage(),
+         estimateBarHeight:Bool,
          onDismiss:@escaping ()->Void){
         self.contentView = contentView
         self.contentName = name
@@ -65,6 +71,7 @@ public class NORouterViewModel:ObservableObject{
         self.previouRouterViewModel = previouRouterViewModel
         self.onDismiss = onDismiss
         self.storage = storage
+        self.estimateBarHeight = estimateBarHeight
     }
     
     func getContentView() -> AnyView {
@@ -151,7 +158,7 @@ public class NORouterViewModel:ObservableObject{
         self.transition = transition
         let impl = NORouterSubscriberImpl(contentView: sheetView, storage: self.storage)
         self.delegate?.routerOnCreateView(impl)
-        self.sheetView = AnyView(SceneView().environmentObject(NORouterViewModel(contentView: impl.contentView, name: name, delegate: self.delegate, previouRouterViewModel: self, storage: self.storage, onDismiss: onDismiss)))
+        self.sheetView = AnyView(SceneView().environmentObject(NORouterViewModel(contentView: impl.contentView, name: name, delegate: self.delegate, previouRouterViewModel: self, storage: self.storage, estimateBarHeight: false, onDismiss: onDismiss)))
         self.isSheetView = true
     }
     
@@ -163,7 +170,7 @@ public class NORouterViewModel:ObservableObject{
         self.transition = transition
         let impl = NORouterSubscriberImpl(contentView: routerType.onCreateView(storage: self.storage), storage: self.storage)
         self.delegate?.routerOnCreateView(impl)
-        self.sheetView = AnyView(SceneView().environmentObject(NORouterViewModel.init(contentView: impl.contentView, name: name, delegate: self.delegate, previouRouterViewModel: self, storage: self.storage, onDismiss: onDismiss)))
+        self.sheetView = AnyView(SceneView().environmentObject(NORouterViewModel.init(contentView: impl.contentView, name: name, delegate: self.delegate, previouRouterViewModel: self, storage: self.storage, estimateBarHeight: false, onDismiss: onDismiss)))
         self.isSheetView = true
     }
     
