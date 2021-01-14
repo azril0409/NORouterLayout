@@ -37,15 +37,15 @@ public struct NONavigationBar: View {
         HStack{
             if self.routerViewModel.canDismissCover() || self.routerViewModel.canDismiss() || self.routerViewModel.canDismissSheet() {
                 Button(action: {
-                    print("canDismissCover: \(self.routerViewModel.canDismiss())")
+                    print("canDismiss: \(self.routerViewModel.canDismiss())")
                     print("canDismissCover: \(self.routerViewModel.canDismissCover())")
                     print("canDismissSheet: \(self.routerViewModel.canDismissSheet())")
                     if self.routerViewModel.canDismiss(){
                         self.routerViewModel.dismiss()
-                    }else if self.routerViewModel.canDismissCover() {
-                        self.routerViewModel.dismissCover()
                     }else if self.routerViewModel.canDismissSheet() {
                         self.routerViewModel.dismissSheet()
+                    }else if self.routerViewModel.canDismissCover() {
+                        self.routerViewModel.dismissCover()
                     }
                 }, label: {
                     HStack(alignment: .center, spacing: 8){

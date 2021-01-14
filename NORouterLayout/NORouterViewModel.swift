@@ -227,7 +227,11 @@ public class NORouterViewModel:ObservableObject{
     
     public func dismissCover(){
         withAnimation(.spring(response: 0.35, dampingFraction: 0.72, blendDuration: 0)) {
-            self.previouRouterViewModel?.coverView = nil
+            if self.coverView != nil{
+                self.coverView = nil
+            }else  if let previouRouterViewModel = self.previouRouterViewModel {
+                previouRouterViewModel.coverView = nil
+            }
         }
     }
     
@@ -238,15 +242,21 @@ public class NORouterViewModel:ObservableObject{
     }
     
     public func canDismiss() -> Bool{
-        !self.nameList.isEmpty
+        !self.viewHistory.isEmpty
     }
     
     public func canDismissSheet() -> Bool{
-        self.previouRouterViewModel != nil
+        return self.previouRouterViewModel?.isSheetView == true
     }
     
     public func canDismissCover() -> Bool{
-        self.previouRouterViewModel?.coverView != nil
+        if self.coverView != nil{
+            return true
+        }else  if let previouRouterViewModel = self.previouRouterViewModel {
+            return previouRouterViewModel.canDismissCover()
+        }else{
+            return false
+        }
     }
     
     public func getConentName()->String{
@@ -256,6 +266,5 @@ public class NORouterViewModel:ObservableObject{
     public func getPreviouName() -> String? {
         self.nameList.last ?? (self.previouRouterViewModel == nil ? nil : self.previouRouterViewModel?.contentName)
     }
-    
 }
 
