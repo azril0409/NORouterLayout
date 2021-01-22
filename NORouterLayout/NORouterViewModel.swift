@@ -170,7 +170,7 @@ public class NORouterViewModel:ObservableObject{
         self.transition = transition
         let impl = NORouterSubscriberImpl(contentView: routerType.onCreateView(storage: self.storage), storage: self.storage)
         self.delegate?.routerOnCreateView(impl)
-        self.sheetView = AnyView(SceneView().environmentObject(NORouterViewModel.init(contentView: impl.contentView, name: name, delegate: self.delegate, previouRouterViewModel: self, storage: self.storage, estimateBarHeight: false, onDismiss: onDismiss)))
+        self.sheetView = AnyView(SceneView().environmentObject(NORouterViewModel(contentView: impl.contentView, name: name, delegate: self.delegate, previouRouterViewModel: self, storage: self.storage, estimateBarHeight: false, onDismiss: onDismiss)))
         self.isSheetView = true
     }
     
@@ -214,6 +214,7 @@ public class NORouterViewModel:ObservableObject{
             self.contentName = self.nameList.removeLast()
         }
     }
+    
     public func dismiss(to name:String){
         self.isAnimationRunning = true
         withAnimation(.spring(response: 0.35, dampingFraction: 0.72, blendDuration: 0)) {
@@ -227,7 +228,10 @@ public class NORouterViewModel:ObservableObject{
     }
     
     public func dismissSheet(){
-        if let viewModel = self.previouRouterViewModel {
+        if self.isSheetView {
+            self.isSheetView = false
+            self.sheetView = .none
+        }else if let viewModel = self.previouRouterViewModel {
             viewModel.isSheetView = false
             viewModel.sheetView = .none
         }
@@ -254,7 +258,7 @@ public class NORouterViewModel:ObservableObject{
     }
     
     public func canDismissSheet() -> Bool{
-        return self.previouRouterViewModel?.isSheetView == true
+        return self.isSheetView || self.previouRouterViewModel?.isSheetView == true
     }
     
     public func canDismissCover() -> Bool{

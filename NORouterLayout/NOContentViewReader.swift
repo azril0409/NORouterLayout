@@ -14,19 +14,10 @@ public struct NOContentViewReader: View {
     
     public init(@ViewBuilder content:(NOContentViewProxy)->NOContentView) {
         self.content = content(contentViewProxy)
-        let routerViewModel = self.content.routerViewModel
-        contentViewProxy.updateRouterViewModel(routerViewModel)
+        contentViewProxy.updateRouterViewModel(self.content.routerViewModel)
     }
     
     public var body: some View {
         SceneView().edgesIgnoringSafeArea(content.edge).environmentObject(content.routerViewModel)
-    }
-}
-
-struct NOContentViewReader_Previews: PreviewProvider {
-    static var previews: some View {
-        NOContentViewReader{_ in
-            NOContentView(Text("Hello World!!"))
-        }
     }
 }

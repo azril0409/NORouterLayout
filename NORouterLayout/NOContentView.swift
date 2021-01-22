@@ -57,4 +57,9 @@ public struct NOContentView: View {
         routerViewModel.injectEnvironmentObject(object)
         return self
     }
+    
+    public func onReadied(perform:@escaping()->Void) -> NOContentView{
+        DispatchQueue.main.async { perform() }
+        return self
+    }
 }
