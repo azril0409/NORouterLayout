@@ -57,11 +57,4 @@ public struct NOContentView: View {
         routerViewModel.injectEnvironmentObject(object)
         return self
     }
-    
-    public func routerViewModel(_ sync:@escaping(NORouterViewModel)->Void) -> NOContentView{
-        DispatchQueue.main.async {
-            sync(self.routerViewModel)
-        }
-        return self
-    }
 }
