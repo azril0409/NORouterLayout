@@ -97,7 +97,7 @@ public class NORouterViewModel:ObservableObject{
             self.contentView = AnyView(contentView.environmentObject(object))
         }
     }
-
+    
     public func present<Content:View>(_ presentView:Content, _ transition:AnyTransition = .opacity){
         self.present(presentView, "", transition)
     }
@@ -215,6 +215,17 @@ public class NORouterViewModel:ObservableObject{
             self.isAnimationRunning = false
             self.sceneView = self.viewHistory.removeLast()
             self.contentName = self.nameList.removeLast()
+        }
+    }
+    public func dismiss(to name:String){
+        self.isAnimationRunning = true
+        withAnimation(.spring(response: 0.35, dampingFraction: 0.72, blendDuration: 0)) {
+            self.isAnimationRunning = false
+            while self.contentName != name {
+                if viewHistory.isEmpty || self.nameList.isEmpty { return }
+                self.sceneView = self.viewHistory.removeLast()
+                self.contentName = self.nameList.removeLast()
+            }
         }
     }
     

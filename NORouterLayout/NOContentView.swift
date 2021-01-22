@@ -10,8 +10,8 @@ import SwiftUI
 import Combine
 
 public struct NOContentView: View {
-    private let edge:Edge.Set
-    private let routerViewModel:NORouterViewModel
+    internal let edge:Edge.Set
+    internal let routerViewModel:NORouterViewModel
     
     public init<Content:View>(_ contentView:Content,
                               name:String = "",

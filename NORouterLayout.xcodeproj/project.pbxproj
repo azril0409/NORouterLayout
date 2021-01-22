@@ -31,6 +31,8 @@
 		74568BA02590A17600B08FD0 /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74568B9F2590A17600B08FD0 /* Router.swift */; };
 		74568BA62590A18A00B08FD0 /* PresentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74568BA52590A18A00B08FD0 /* PresentView.swift */; };
 		74568BAA2590A19900B08FD0 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74568BA92590A19900B08FD0 /* MainView.swift */; };
+		7460F65125BA604F00472FB6 /* NOContentViewReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7460F65025BA604F00472FB6 /* NOContentViewReader.swift */; };
+		7460F65425BA667400472FB6 /* NOContentViewProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7460F65325BA667400472FB6 /* NOContentViewProxy.swift */; };
 		748A59352536C2D800983267 /* RouterType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 748A59342536C2D800983267 /* RouterType.swift */; };
 		74D234CD250868210055866F /* NORouterLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = 74D234CB250868210055866F /* NORouterLayout.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		74D234D4250869B60055866F /* NOContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D234D3250869B60055866F /* NOContentView.swift */; };
@@ -109,6 +111,8 @@
 		74568B9F2590A17600B08FD0 /* Router.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
 		74568BA52590A18A00B08FD0 /* PresentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresentView.swift; sourceTree = "<group>"; };
 		74568BA92590A19900B08FD0 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
+		7460F65025BA604F00472FB6 /* NOContentViewReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NOContentViewReader.swift; sourceTree = "<group>"; };
+		7460F65325BA667400472FB6 /* NOContentViewProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NOContentViewProxy.swift; sourceTree = "<group>"; };
 		748A59342536C2D800983267 /* RouterType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouterType.swift; sourceTree = "<group>"; };
 		74D234C8250868210055866F /* NORouterLayout.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = NORouterLayout.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		74D234CB250868210055866F /* NORouterLayout.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NORouterLayout.h; sourceTree = "<group>"; };
@@ -242,6 +246,8 @@
 				74E85BB8255E22B800FB1A65 /* SizePreferenceKey.swift */,
 				7426312B2599671F0086A2D2 /* NORouterDelegate.swift */,
 				7426312E259969740086A2D2 /* NORouterSubscriber.swift */,
+				7460F65025BA604F00472FB6 /* NOContentViewReader.swift */,
+				7460F65325BA667400472FB6 /* NOContentViewProxy.swift */,
 			);
 			path = NORouterLayout;
 			sourceTree = "<group>";
@@ -419,11 +425,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7460F65425BA667400472FB6 /* NOContentViewProxy.swift in Sources */,
 				7426312C259967200086A2D2 /* NORouterDelegate.swift in Sources */,
 				74E981F1258CA5210046B3A9 /* NOEnvironmentObjectStorage.swift in Sources */,
 				74D234D8250876670055866F /* NORouterViewModel.swift in Sources */,
 				7426312F259969740086A2D2 /* NORouterSubscriber.swift in Sources */,
 				74E981F4258CAEC00046B3A9 /* NORouterOverModifier.swift in Sources */,
+				7460F65125BA604F00472FB6 /* NOContentViewReader.swift in Sources */,
 				74D234D4250869B60055866F /* NOContentView.swift in Sources */,
 				74F6BFD7257E1017009D42C1 /* SceneView.swift in Sources */,
 				748A59352536C2D800983267 /* RouterType.swift in Sources */,
@@ -686,7 +694,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2.4;
+				MARKETING_VERSION = 1.2.5;
 				PRODUCT_BUNDLE_IDENTIFIER = com.neetoffice.widget.NORouterLayout;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -714,7 +722,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2.4;
+				MARKETING_VERSION = 1.2.5;
 				PRODUCT_BUNDLE_IDENTIFIER = com.neetoffice.widget.NORouterLayout;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
