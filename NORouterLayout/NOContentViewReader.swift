@@ -9,10 +9,10 @@
 import SwiftUI
 
 public struct NOContentViewReader: View {
+    private let contentViewProxy = NOContentViewProxy()
     private let content:NOContentView
     
-    init(@ViewBuilder content:(NOContentViewProxy)->NOContentView) {
-        let contentViewProxy = NOContentViewProxy()
+    public init(@ViewBuilder content:(NOContentViewProxy)->NOContentView) {
         self.content = content(contentViewProxy)
         let routerViewModel = self.content.routerViewModel
         contentViewProxy.updateRouterViewModel(routerViewModel)

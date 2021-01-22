@@ -175,7 +175,7 @@ public class NORouterViewModel:ObservableObject{
     }
     
     public func cover<Content:View>(_ coverView:Content, _ transition:AnyTransition = .move(edge: .bottom)){
-        cover(AnyView(contentView), transition)
+        cover(AnyView(coverView), transition)
     }
     
     public func cover(_ coverView:AnyView, _ transition:AnyTransition = .move(edge: .bottom)){
@@ -186,10 +186,7 @@ public class NORouterViewModel:ObservableObject{
     }
     
     public func cover<Router:RouterType>(_ routerType:Router, _ transition:AnyTransition = .move(edge: .bottom)){
-        self.transition = transition
-        withAnimation(.spring(response: 0.35, dampingFraction: 0.72, blendDuration: 0)) {
-            self.coverView = routerType.onCreateView(storage: self.storage)
-        }
+        cover(routerType.onCreateView(storage: self.storage), transition)
     }
     
     public func bottomSheet<Content:View>(_ bottomSheetView:Content){
