@@ -14,7 +14,9 @@ public struct NOContentViewReader: View {
     
     public init(@ViewBuilder content:(NOContentViewProxy)->NOContentView) {
         self.content = content(contentViewProxy)
-        contentViewProxy.updateRouterViewModel(self.content.routerViewModel)
+        let routerViewModel = self.content.routerViewModel
+        _ = routerViewModel.getContentView()
+        contentViewProxy.updateRouterViewModel(routerViewModel)
     }
     
     public var body: some View {
