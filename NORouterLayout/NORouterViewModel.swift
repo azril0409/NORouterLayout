@@ -111,6 +111,9 @@ public class NORouterViewModel:ObservableObject{
     }
     
     public func present(_ presentView:AnyView, _ name:String = "", _ transition:AnyTransition = .opacity){
+        if self.sceneView == nil {
+            self.sceneView = self.getContentView()
+        }
         self.viewHistory.append(self.sceneView!)
         self.nameList.append(self.contentName)
         self.isAnimationRunning = true
@@ -129,6 +132,9 @@ public class NORouterViewModel:ObservableObject{
     }
     
     public func present<Router:RouterType>(_ routerType:Router, _ name:String = "", _ transition:AnyTransition = .opacity){
+        if self.sceneView == nil {
+            self.sceneView = self.getContentView()
+        }
         self.viewHistory.append(self.sceneView!)
         self.nameList.append(self.contentName)
         self.isAnimationRunning = true
@@ -241,7 +247,7 @@ public class NORouterViewModel:ObservableObject{
         withAnimation(.spring(response: 0.35, dampingFraction: 0.72, blendDuration: 0)) {
             if self.coverView != nil{
                 self.coverView = nil
-            }else  if let previouRouterViewModel = self.previouRouterViewModel {
+            }else if let previouRouterViewModel = self.previouRouterViewModel {
                 previouRouterViewModel.coverView = nil
             }
         }

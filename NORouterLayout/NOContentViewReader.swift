@@ -15,11 +15,10 @@ public struct NOContentViewReader: View {
     public init(@ViewBuilder content:(NOContentViewProxy)->NOContentView) {
         self.content = content(contentViewProxy)
         let routerViewModel = self.content.routerViewModel
-        _ = routerViewModel.getContentView()
         contentViewProxy.updateRouterViewModel(routerViewModel)
     }
     
     public var body: some View {
-        SceneView().edgesIgnoringSafeArea(content.edge).environmentObject(content.routerViewModel)
+        self.content
     }
 }
