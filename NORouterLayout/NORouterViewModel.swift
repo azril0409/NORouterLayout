@@ -12,23 +12,39 @@ import Combine
 
 public class NORouterViewModel:ObservableObject{
     private var previouRouterViewModel:NORouterViewModel?
-    private var viewHistory:[AnyView] = []
-    private var nameList:[String] = []
-    public let delegate:NORouterDelegate?
-    let onDismiss:()->Void
-    let storage:NOEnvironmentObjectStorage
+    public var delegate:NORouterDelegate?
+    var storage:NOEnvironmentObjectStorage
     let estimateBarHeight:Bool
+    private var contentView:AnyView? = nil
+    private var contentRouter:RouterType? = nil
+    
+    /**
+     
+     */
+    @Published var isAnimationRunning:Bool = false
     @Published var sceneView:AnyView? = nil
     @Published var contentName:String
-    @Published var isAnimationRunning:Bool = false
+    private var viewHistory:[AnyView] = []
+    private var nameList:[String] = []
+    var transition:AnyTransition = .opacity
+    /**
+     
+     */
     @Published var isSheetView:Bool = false
     @Published var sheetName:String? = .none
     @Published var sheetView:AnyView? = nil
+    let onDismiss:()->Void
+    
+    /**
+     
+     */
     @Published var coverView:AnyView? = nil
+    
+    /**
+     
+     */
     @Published var bottomSheetView:AnyView? = nil
-    var transition:AnyTransition = .opacity
-    private var contentView:AnyView? = nil
-    private var contentRouter:RouterType? = nil
+    
     
     init<Content:View>(contentView:Content,
                        name:String = "",
@@ -74,6 +90,34 @@ public class NORouterViewModel:ObservableObject{
         self.estimateBarHeight = estimateBarHeight
     }
     
+    public init<Content:View>(_ contentView:Content,
+                              name:String = ""){
+        self.contentView = AnyView(contentView)
+        self.contentName = name
+        self.delegate = nil
+        self.previouRouterViewModel = nil
+        self.onDismiss = {}
+        self.storage = NOEnvironmentObjectStorage()
+        self.estimateBarHeight = false
+    }
+    
+    public init<Router:RouterType>(_ routerType:Router,
+                                   name:String = ""){
+        self.contentRouter = routerType
+        self.contentName = name
+        self.delegate = nil
+        self.previouRouterViewModel = nil
+        self.onDismiss = {}
+        self.storage = NOEnvironmentObjectStorage()
+        self.estimateBarHeight = false
+    }
+}
+
+/**
+ 
+ */
+
+extension NORouterViewModel{
     func getContentView() -> AnyView {
         let view:AnyView
         if let contentRouter = self.contentRouter {
@@ -96,6 +140,28 @@ public class NORouterViewModel:ObservableObject{
         if let contentView = self.contentView, delegate == nil {
             self.contentView = AnyView(contentView.environmentObject(object))
         }
+    }
+    
+    public func getConentName()->String{
+        self.contentName
+    }
+    
+    public func getPreviouName() -> String? {
+        self.nameList.last ?? (self.previouRouterViewModel == nil ? nil : self.previouRouterViewModel?.contentName)
+    }
+}
+
+/**
+ 
+ */
+//MARK:Content
+extension NORouterViewModel{
+    public func present<Router:RouterType>(_ routerType:Router, _ transition:AnyTransition = .opacity){
+        self.present(routerType, "", transition)
+    }
+    
+    public func present<Router:RouterType>(_ routerType:Router, _ name:String = "", _ transition:AnyTransition = .opacity){
+        self.present(routerType.onCreateView(storage: self.storage))
     }
     
     public func present<Content:View>(_ presentView:Content, _ transition:AnyTransition = .opacity){
@@ -127,88 +193,8 @@ public class NORouterViewModel:ObservableObject{
         }
     }
     
-    public func present<Router:RouterType>(_ routerType:Router, _ transition:AnyTransition = .opacity){
-        self.present(routerType, "", transition)
-    }
-    
-    public func present<Router:RouterType>(_ routerType:Router, _ name:String = "", _ transition:AnyTransition = .opacity){
-        if self.sceneView == nil {
-            self.sceneView = self.getContentView()
-        }
-        self.viewHistory.append(self.sceneView!)
-        self.nameList.append(self.contentName)
-        self.isAnimationRunning = true
-        self.transition = transition
-        let impl = NORouterSubscriberImpl(contentView: routerType.onCreateView(storage: self.storage), storage: self.storage)
-        self.delegate?.routerOnCreateView(impl)
-        withAnimation(.spring(response: 0.35, dampingFraction: 0.72, blendDuration: 0)) {
-            self.isAnimationRunning = false
-            self.sceneView = impl.contentView
-            self.contentName = name
-        }
-    }
-    
-    public func sheet<Content:View>(_ presentView:Content, _ transition:AnyTransition = .opacity, _ onDismiss:@escaping ()->Void = {}){
-        self.sheet(presentView, "", transition, onDismiss)
-    }
-    
-    public func sheet<Content:View>(_ presentView:Content, _ name:String = "", _ transition:AnyTransition = .opacity, _ onDismiss:@escaping ()->Void = {}){
-        self.sheet(AnyView(presentView), name, transition, onDismiss)
-    }
-    
-    public func sheet(_ sheetView:AnyView, _ transition:AnyTransition = .opacity, _ onDismiss:@escaping ()->Void = {}){
-        self.sheet(sheetView, "", transition, onDismiss)
-    }
-    
-    public func sheet(_ sheetView:AnyView, _ name:String = "", _ transition:AnyTransition = .opacity, _ onDismiss:@escaping ()->Void = {}){
-        self.transition = transition
-        let impl = NORouterSubscriberImpl(contentView: sheetView, storage: self.storage)
-        self.delegate?.routerOnCreateView(impl)
-        self.sheetView = AnyView(SceneView().environmentObject(NORouterViewModel(contentView: impl.contentView, name: name, delegate: self.delegate, previouRouterViewModel: self, storage: self.storage, estimateBarHeight: false, onDismiss: onDismiss)))
-        self.isSheetView = true
-    }
-    
-    public func sheet<Router:RouterType>(_ routerType:Router, _ transition:AnyTransition = .opacity,_ onDismiss:@escaping ()->Void = {}){
-        self.sheet(routerType, "", transition, onDismiss)
-    }
-    
-    public func sheet<Router:RouterType>(_ routerType:Router, _ name:String = "", _ transition:AnyTransition = .opacity,_ onDismiss:@escaping ()->Void = {}){
-        self.transition = transition
-        let impl = NORouterSubscriberImpl(contentView: routerType.onCreateView(storage: self.storage), storage: self.storage)
-        self.delegate?.routerOnCreateView(impl)
-        self.sheetView = AnyView(SceneView().environmentObject(NORouterViewModel(contentView: impl.contentView, name: name, delegate: self.delegate, previouRouterViewModel: self, storage: self.storage, estimateBarHeight: false, onDismiss: onDismiss)))
-        self.isSheetView = true
-    }
-    
-    public func cover<Content:View>(_ coverView:Content, _ transition:AnyTransition = .move(edge: .bottom)){
-        cover(AnyView(coverView), transition)
-    }
-    
-    public func cover(_ coverView:AnyView, _ transition:AnyTransition = .move(edge: .bottom)){
-        self.transition = transition
-        withAnimation(.spring(response: 0.35, dampingFraction: 0.72, blendDuration: 0)) {
-            self.coverView = coverView
-        }
-    }
-    
-    public func cover<Router:RouterType>(_ routerType:Router, _ transition:AnyTransition = .move(edge: .bottom)){
-        cover(routerType.onCreateView(storage: self.storage), transition)
-    }
-    
-    public func bottomSheet<Content:View>(_ bottomSheetView:Content){
-        self.bottomSheet(AnyView(bottomSheetView))
-    }
-    
-    public func bottomSheet(_ bottomSheetView:AnyView){
-        withAnimation(.spring()) {
-            self.bottomSheetView = bottomSheetView
-        }
-    }
-    
-    public func bottomSheet<Router:RouterType>(_ routerType:Router){
-        withAnimation(.spring(response: 0.35, dampingFraction: 0.72, blendDuration: 0)) {
-            self.bottomSheetView = routerType.onCreateView(storage: self.storage)
-        }
+    public func canDismiss() -> Bool{
+        !self.viewHistory.isEmpty
     }
     
     public func dismiss(){
@@ -233,6 +219,50 @@ public class NORouterViewModel:ObservableObject{
         }
     }
     
+}
+
+/**
+ 
+ */
+//MARK:Sheet
+extension NORouterViewModel{
+    
+    public func sheet<Router:RouterType>(_ routerType:Router, _ transition:AnyTransition = .opacity,_ onDismiss:@escaping ()->Void = {}){
+        self.sheet(routerType, "", transition, onDismiss)
+    }
+    
+    public func sheet<Router:RouterType>(_ routerType:Router, _ name:String = "", _ transition:AnyTransition = .opacity,_ onDismiss:@escaping ()->Void = {}){
+        self.sheet(routerType.onCreateView(storage: self.storage))
+    }
+    
+    public func sheet<Content:View>(_ presentView:Content, _ transition:AnyTransition = .opacity, _ onDismiss:@escaping ()->Void = {}){
+        self.sheet(presentView, "", transition, onDismiss)
+    }
+    
+    public func sheet<Content:View>(_ presentView:Content, _ name:String = "", _ transition:AnyTransition = .opacity, _ onDismiss:@escaping ()->Void = {}){
+        self.sheet(AnyView(presentView), name, transition, onDismiss)
+    }
+    
+    public func sheet(_ sheetView:AnyView, _ transition:AnyTransition = .opacity, _ onDismiss:@escaping ()->Void = {}){
+        self.sheet(sheetView, "", transition, onDismiss)
+    }
+    
+    public func sheet(_ sheetView:AnyView, _ name:String = "", _ transition:AnyTransition = .opacity, _ onDismiss:@escaping ()->Void = {}){
+        DispatchQueue.global(qos: .background).async {
+            let impl = NORouterSubscriberImpl(contentView: sheetView, storage: self.storage)
+            self.delegate?.routerOnCreateView(impl)
+            DispatchQueue.main.async {
+                self.transition = transition
+                self.sheetView = AnyView(SceneView().environmentObject(NORouterViewModel(contentView: impl.contentView, name: name, delegate: self.delegate, previouRouterViewModel: self, storage: self.storage, estimateBarHeight: false, onDismiss: onDismiss)))
+                self.isSheetView = true
+            }
+        }
+    }
+    
+    public func canDismissSheet() -> Bool{
+        return self.isSheetView || self.previouRouterViewModel?.isSheetView == true
+    }
+    
     public func dismissSheet(){
         if self.isSheetView {
             self.isSheetView = false
@@ -242,29 +272,33 @@ public class NORouterViewModel:ObservableObject{
             viewModel.sheetView = .none
         }
     }
+}
+
+/**
+ 
+ */
+//MARK:Cover
+extension NORouterViewModel{
     
-    public func dismissCover(){
-        withAnimation(.spring(response: 0.35, dampingFraction: 0.72, blendDuration: 0)) {
-            if self.coverView != nil{
-                self.coverView = nil
-            }else if let previouRouterViewModel = self.previouRouterViewModel {
-                previouRouterViewModel.coverView = nil
+    public func cover<Content:View>(_ coverView:Content, _ transition:AnyTransition = .move(edge: .bottom)){
+        DispatchQueue.global(qos: .background).async {
+            self.cover(AnyView(coverView), transition)
+        }
+    }
+    
+    public func cover<Router:RouterType>(_ routerType:Router, _ transition:AnyTransition = .move(edge: .bottom)){
+        DispatchQueue.global(qos: .background).async {
+            self.cover(routerType.onCreateView(storage: self.storage), transition)
+        }
+    }
+    
+    public func cover(_ coverView:AnyView, _ transition:AnyTransition = .move(edge: .bottom)){
+        DispatchQueue.main.async {
+            self.transition = transition
+            withAnimation(.spring(response: 0.35, dampingFraction: 0.72, blendDuration: 0)) {
+                self.coverView = coverView
             }
         }
-    }
-    
-    public func dismissBottomSheet(){
-        withAnimation(.spring(response: 0.35, dampingFraction: 0.72, blendDuration: 0)) {
-            self.bottomSheetView = nil
-        }
-    }
-    
-    public func canDismiss() -> Bool{
-        !self.viewHistory.isEmpty
-    }
-    
-    public func canDismissSheet() -> Bool{
-        return self.isSheetView || self.previouRouterViewModel?.isSheetView == true
     }
     
     public func canDismissCover() -> Bool{
@@ -277,12 +311,46 @@ public class NORouterViewModel:ObservableObject{
         }
     }
     
-    public func getConentName()->String{
-        self.contentName
-    }
-    
-    public func getPreviouName() -> String? {
-        self.nameList.last ?? (self.previouRouterViewModel == nil ? nil : self.previouRouterViewModel?.contentName)
+    public func dismissCover(){
+        withAnimation(.spring(response: 0.35, dampingFraction: 0.72, blendDuration: 0)) {
+            if self.coverView != nil{
+                self.coverView = nil
+            }else if let previouRouterViewModel = self.previouRouterViewModel {
+                previouRouterViewModel.coverView = nil
+            }
+        }
     }
 }
 
+/**
+ 
+ */
+//MARK:BottomSheet
+extension NORouterViewModel{
+    
+    public func bottomSheet<Content:View>(_ bottomSheetView:Content){
+        DispatchQueue.global(qos: .background).async {
+            self.bottomSheet(AnyView(bottomSheetView))
+        }
+    }
+    
+    public func bottomSheet<Router:RouterType>(_ routerType:Router){
+        DispatchQueue.global(qos: .background).async {
+            self.bottomSheet(routerType.onCreateView(storage: self.storage))
+        }
+    }
+    
+    public func bottomSheet(_ bottomSheetView:AnyView){
+        DispatchQueue.main.async {
+            withAnimation(.spring(response: 0.35, dampingFraction: 0.72, blendDuration: 0)) {
+                self.bottomSheetView = bottomSheetView
+            }
+        }
+    }
+    
+    public func dismissBottomSheet(){
+        withAnimation(.spring(response: 0.35, dampingFraction: 0.72, blendDuration: 0)) {
+            self.bottomSheetView = nil
+        }
+    }
+}
