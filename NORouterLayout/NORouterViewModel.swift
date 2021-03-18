@@ -56,7 +56,7 @@ public class NORouterViewModel:ObservableObject{
     }
     
     public init<Router:RouterType>(routerType:Router,
-                              name:String = ""){
+                                   name:String = ""){
         self.contentRouter = routerType
         previouRouterViewModel = nil
         delegate = nil
@@ -76,10 +76,10 @@ public class NORouterViewModel:ObservableObject{
     }
     
     func onInit<Content:View>(contentView:Content,
-                       name:String = "",
-                       delegate:NORouterDelegate?,
-                       storage:NOEnvironmentObjectStorage = NOEnvironmentObjectStorage(),
-                       estimateBarHeight:Bool) {
+                              name:String = "",
+                              delegate:NORouterDelegate?,
+                              storage:NOEnvironmentObjectStorage = NOEnvironmentObjectStorage(),
+                              estimateBarHeight:Bool) {
         self.contentView = AnyView(contentView)
         self.contentName = name
         self.delegate = delegate
@@ -89,10 +89,10 @@ public class NORouterViewModel:ObservableObject{
     }
     
     func onInit<Router:RouterType>(routerType:Router,
-                            name:String = "",
-                            delegate:NORouterDelegate?,
-                            storage:NOEnvironmentObjectStorage = NOEnvironmentObjectStorage(),
-                            estimateBarHeight:Bool) {
+                                   name:String = "",
+                                   delegate:NORouterDelegate?,
+                                   storage:NOEnvironmentObjectStorage = NOEnvironmentObjectStorage(),
+                                   estimateBarHeight:Bool) {
         self.contentRouter = routerType
         self.contentName = name
         self.delegate = delegate
@@ -131,7 +131,6 @@ public class NORouterViewModel:ObservableObject{
 /**
  
  */
-
 extension NORouterViewModel{
     func getContentView() -> AnyView {
         let view:AnyView
@@ -242,32 +241,32 @@ extension NORouterViewModel{
 //MARK:Sheet
 extension NORouterViewModel{
     
-    public func sheet<Router:RouterType>(_ routerType:Router, _ transition:AnyTransition = .opacity,_ onDismiss:@escaping ()->Void = {}){
-        self.sheet(routerType, "", transition, onDismiss)
+    public func sheet<Router:RouterType>(_ routerType:Router,_ onDismiss:@escaping ()->Void = {}){
+        self.sheet(routerType, "", onDismiss)
     }
     
-    public func sheet<Router:RouterType>(_ routerType:Router, _ name:String = "", _ transition:AnyTransition = .opacity,_ onDismiss:@escaping ()->Void = {}){
-        self.sheet(routerType.onCreateView(storage: self.storage))
+    public func sheet<Router:RouterType>(_ routerType:Router, _ name:String = "", _ onDismiss:@escaping ()->Void = {}){
+        self.sheet(routerType.onCreateView(storage: self.storage), name, onDismiss)
     }
     
-    public func sheet<Content:View>(_ presentView:Content, _ transition:AnyTransition = .opacity, _ onDismiss:@escaping ()->Void = {}){
-        self.sheet(presentView, "", transition, onDismiss)
+    public func sheet<Content:View>(_ presentView:Content, _ onDismiss:@escaping ()->Void = {}){
+        self.sheet(presentView, "", onDismiss)
     }
     
-    public func sheet<Content:View>(_ presentView:Content, _ name:String = "", _ transition:AnyTransition = .opacity, _ onDismiss:@escaping ()->Void = {}){
-        self.sheet(AnyView(presentView), name, transition, onDismiss)
+    public func sheet<Content:View>(_ presentView:Content, _ name:String = "", _ onDismiss:@escaping ()->Void = {}){
+        self.sheet(AnyView(presentView), name, onDismiss)
     }
     
-    public func sheet(_ sheetView:AnyView, _ transition:AnyTransition = .opacity, _ onDismiss:@escaping ()->Void = {}){
-        self.sheet(sheetView, "", transition, onDismiss)
+    public func sheet(_ sheetView:AnyView, _ onDismiss:@escaping ()->Void = {}){
+        self.sheet(sheetView, "", onDismiss)
     }
     
-    public func sheet(_ sheetView:AnyView, _ name:String = "", _ transition:AnyTransition = .opacity, _ onDismiss:@escaping ()->Void = {}){
+    public func sheet(_ sheetView:AnyView, _ name:String = "", _ onDismiss:@escaping ()->Void = {}){
         DispatchQueue.global(qos: .background).async {
             let impl = NORouterSubscriberImpl(contentView: sheetView, storage: self.storage)
             self.delegate?.routerOnCreateView(impl)
             DispatchQueue.main.async {
-                self.sheetView = AnyView(SceneView().environmentObject(NORouterViewModel(contentView: impl.contentView, name: name, delegate: self.delegate, previouRouterViewModel: self, storage: self.storage, estimateBarHeight: false, onDismiss: onDismiss)).transition(transition))
+                self.sheetView = AnyView(SceneView().environmentObject(NORouterViewModel(contentView: impl.contentView, name: name, delegate: self.delegate, previouRouterViewModel: self, storage: self.storage, estimateBarHeight: false, onDismiss: onDismiss)))
                 self.isSheetView = true
             }
         }
@@ -294,19 +293,19 @@ extension NORouterViewModel{
 //MARK:Cover
 extension NORouterViewModel{
     
-    public func cover<Content:View>(_ coverView:Content, _ transition:AnyTransition = .move(edge: .bottom)){
+    public func cover<Content:View>(_ coverView:Content){
         DispatchQueue.global(qos: .background).async {
-            self.cover(AnyView(coverView), transition)
+            self.cover(AnyView(coverView))
         }
     }
     
-    public func cover<Router:RouterType>(_ routerType:Router, _ transition:AnyTransition = .move(edge: .bottom)){
+    public func cover<Router:RouterType>(_ routerType:Router){
         DispatchQueue.global(qos: .background).async {
-            self.cover(routerType.onCreateView(storage: self.storage), transition)
+            self.cover(routerType.onCreateView(storage: self.storage))
         }
     }
     
-    public func cover(_ coverView:AnyView, _ transition:AnyTransition = .move(edge: .bottom)){
+    public func cover(_ coverView:AnyView){
         DispatchQueue.main.async {
             withAnimation(.spring(response: 0.35, dampingFraction: 0.72, blendDuration: 0)) {
                 self.coverView = coverView

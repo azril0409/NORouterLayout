@@ -64,7 +64,6 @@ public struct NOContentView: View {
         self.routerViewModel.storage = routerViewModel.storage
     }
 
-    
     public var body: some View {
         SceneView().edgesIgnoringSafeArea(edge).environmentObject(self.routerViewModel)
     }

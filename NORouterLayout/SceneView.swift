@@ -12,7 +12,7 @@ struct SceneView: View {
     @EnvironmentObject private var routerViewModel:NORouterViewModel
 
     public var body: some View {
-        VStack{
+        ZStack{
             Spacer().sheet(isPresented: self.$routerViewModel.isSheetView, onDismiss: {
                 self.routerViewModel.onDismiss()
             }) {
