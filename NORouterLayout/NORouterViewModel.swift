@@ -14,7 +14,7 @@ public class NORouterViewModel:ObservableObject{
     private var previouRouterViewModel:NORouterViewModel?
     public var delegate:NORouterDelegate?
     var storage:NOEnvironmentObjectStorage
-    let estimateBarHeight:Bool
+    var estimateBarHeight:Bool
     private var contentView:AnyView? = nil
     private var contentRouter:RouterType? = nil
     
@@ -26,12 +26,11 @@ public class NORouterViewModel:ObservableObject{
     @Published var contentName:String
     private var viewHistory:[AnyView] = []
     private var nameList:[String] = []
-    var transition:AnyTransition = .opacity
     /**
      
      */
     @Published var isSheetView:Bool = false
-    @Published var sheetName:String? = .none
+    @Published var sheetName:String? = nil
     @Published var sheetView:AnyView? = nil
     let onDismiss:()->Void
     
@@ -45,8 +44,16 @@ public class NORouterViewModel:ObservableObject{
      */
     @Published var bottomSheetView:AnyView? = nil
     
+    init() {
+        previouRouterViewModel = nil
+        delegate = nil
+        storage = NOEnvironmentObjectStorage()
+        self.contentName = ""
+        self.estimateBarHeight = false
+        onDismiss = {}
+    }
     
-    init<Content:View>(contentView:Content,
+    func onInit<Content:View>(contentView:Content,
                        name:String = "",
                        delegate:NORouterDelegate?,
                        storage:NOEnvironmentObjectStorage = NOEnvironmentObjectStorage(),
@@ -54,13 +61,12 @@ public class NORouterViewModel:ObservableObject{
         self.contentView = AnyView(contentView)
         self.contentName = name
         self.delegate = delegate
-        self.previouRouterViewModel = .none
-        self.onDismiss = {}
+        self.previouRouterViewModel = nil
         self.storage = storage
         self.estimateBarHeight = estimateBarHeight
     }
     
-    init<Router:RouterType>(routerType:Router,
+    func onInit<Router:RouterType>(routerType:Router,
                             name:String = "",
                             delegate:NORouterDelegate?,
                             storage:NOEnvironmentObjectStorage = NOEnvironmentObjectStorage(),
@@ -68,10 +74,19 @@ public class NORouterViewModel:ObservableObject{
         self.contentRouter = routerType
         self.contentName = name
         self.delegate = delegate
-        self.previouRouterViewModel = .none
-        self.onDismiss = {}
+        self.previouRouterViewModel = nil
         self.storage = storage
         self.estimateBarHeight = estimateBarHeight
+    }
+    
+    func onInit(routerViewModel:NORouterViewModel) {
+        self.contentView = routerViewModel.contentView
+        self.contentRouter = routerViewModel.contentRouter
+        self.contentName = routerViewModel.contentName
+        self.delegate = routerViewModel.delegate
+        self.previouRouterViewModel = routerViewModel.previouRouterViewModel
+        self.storage = routerViewModel.storage
+        self.estimateBarHeight = routerViewModel.estimateBarHeight
     }
     
     init(contentView:AnyView,
@@ -88,28 +103,6 @@ public class NORouterViewModel:ObservableObject{
         self.onDismiss = onDismiss
         self.storage = storage
         self.estimateBarHeight = estimateBarHeight
-    }
-    
-    public init<Content:View>(_ contentView:Content,
-                              name:String = ""){
-        self.contentView = AnyView(contentView)
-        self.contentName = name
-        self.delegate = nil
-        self.previouRouterViewModel = nil
-        self.onDismiss = {}
-        self.storage = NOEnvironmentObjectStorage()
-        self.estimateBarHeight = false
-    }
-    
-    public init<Router:RouterType>(_ routerType:Router,
-                                   name:String = ""){
-        self.contentRouter = routerType
-        self.contentName = name
-        self.delegate = nil
-        self.previouRouterViewModel = nil
-        self.onDismiss = {}
-        self.storage = NOEnvironmentObjectStorage()
-        self.estimateBarHeight = false
     }
 }
 
@@ -156,34 +149,34 @@ extension NORouterViewModel{
  */
 //MARK:Content
 extension NORouterViewModel{
-    public func present<Router:RouterType>(_ routerType:Router, _ transition:AnyTransition = .opacity){
-        self.present(routerType, "", transition)
+    public func present<Router:RouterType>(_ routerType:Router){
+        self.present(routerType, "")
     }
     
-    public func present<Router:RouterType>(_ routerType:Router, _ name:String = "", _ transition:AnyTransition = .opacity){
-        self.present(routerType.onCreateView(storage: self.storage))
+    public func present<Router:RouterType>(_ routerType:Router, _ name:String = ""){
+        self.present(routerType.onCreateView(storage: self.storage), name)
     }
     
-    public func present<Content:View>(_ presentView:Content, _ transition:AnyTransition = .opacity){
-        self.present(presentView, "", transition)
+    public func present<Content:View>(_ presentView:Content){
+        self.present(presentView, "")
     }
     
-    public func present<Content:View>(_ presentView:Content, _ name:String = "", _ transition:AnyTransition = .opacity){
-        self.present(AnyView(presentView), name, transition)
+    public func present<Content:View>(_ presentView:Content, _ name:String = ""){
+        self.present(AnyView(presentView), name)
     }
     
-    public func present(_ presentView:AnyView, _ transition:AnyTransition = .opacity){
-        self.present(presentView, "", transition)
+    public func present(_ presentView:AnyView){
+        self.present(presentView, "")
     }
     
-    public func present(_ presentView:AnyView, _ name:String = "", _ transition:AnyTransition = .opacity){
+    public func present(_ presentView:AnyView, _ name:String = ""){
         if self.sceneView == nil {
             self.sceneView = self.getContentView()
         }
         self.viewHistory.append(self.sceneView!)
         self.nameList.append(self.contentName)
+        self.sceneView = nil
         self.isAnimationRunning = true
-        self.transition = transition
         let impl = NORouterSubscriberImpl(contentView: presentView, storage: self.storage)
         self.delegate?.routerOnCreateView(impl)
         withAnimation(.spring(response: 0.35, dampingFraction: 0.72, blendDuration: 0)) {
@@ -252,8 +245,7 @@ extension NORouterViewModel{
             let impl = NORouterSubscriberImpl(contentView: sheetView, storage: self.storage)
             self.delegate?.routerOnCreateView(impl)
             DispatchQueue.main.async {
-                self.transition = transition
-                self.sheetView = AnyView(SceneView().environmentObject(NORouterViewModel(contentView: impl.contentView, name: name, delegate: self.delegate, previouRouterViewModel: self, storage: self.storage, estimateBarHeight: false, onDismiss: onDismiss)))
+                self.sheetView = AnyView(SceneView().environmentObject(NORouterViewModel(contentView: impl.contentView, name: name, delegate: self.delegate, previouRouterViewModel: self, storage: self.storage, estimateBarHeight: false, onDismiss: onDismiss)).transition(transition))
                 self.isSheetView = true
             }
         }
@@ -294,7 +286,6 @@ extension NORouterViewModel{
     
     public func cover(_ coverView:AnyView, _ transition:AnyTransition = .move(edge: .bottom)){
         DispatchQueue.main.async {
-            self.transition = transition
             withAnimation(.spring(response: 0.35, dampingFraction: 0.72, blendDuration: 0)) {
                 self.coverView = coverView
             }

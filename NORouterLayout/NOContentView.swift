@@ -19,7 +19,8 @@ public struct NOContentView: View {
                               delegate:NORouterDelegate? = nil){
         self.edge = edge
         let estimateBarHeight = edge == .all || edge == .vertical || edge == .top
-        self.routerViewModel = NORouterViewModel(contentView: contentView, name: name, delegate: delegate, estimateBarHeight: estimateBarHeight)
+        self.routerViewModel = NORouterViewModel()
+        self.routerViewModel.onInit(contentView: contentView, name: name, delegate: delegate, estimateBarHeight: estimateBarHeight)
     }
     
     public init<Content:View>(_ contentView:Content,
@@ -28,7 +29,12 @@ public struct NOContentView: View {
                               routerViewModel:NORouterViewModel){
         self.edge = edge
         let estimateBarHeight = edge == .all || edge == .vertical || edge == .top
-        self.routerViewModel = NORouterViewModel(contentView: contentView, name: name, delegate: routerViewModel.delegate, storage: routerViewModel.storage, estimateBarHeight: estimateBarHeight)
+        self.routerViewModel = NORouterViewModel()
+        self.routerViewModel.onInit(contentView: contentView,
+                                    name: name,
+                                    delegate: routerViewModel.delegate,
+                                    storage: routerViewModel.storage,
+                                    estimateBarHeight: estimateBarHeight)
     }
     
     public init<Router:RouterType>(_ routerType:Router,
@@ -37,7 +43,8 @@ public struct NOContentView: View {
                                    delegate:NORouterDelegate? = nil){
         self.edge = edge
         let estimateBarHeight = edge == .all || edge == .vertical || edge == .top
-        self.routerViewModel = NORouterViewModel(routerType: routerType, name: name, delegate: delegate, estimateBarHeight: estimateBarHeight)
+        self.routerViewModel = NORouterViewModel()
+        self.routerViewModel.onInit(routerType: routerType, name: name, delegate: delegate, estimateBarHeight: estimateBarHeight)
     }
     
     public init<Router:RouterType>(_ routerType:Router,
@@ -46,14 +53,8 @@ public struct NOContentView: View {
                                    routerViewModel:NORouterViewModel){
         self.edge = edge
         let estimateBarHeight = edge == .all || edge == .vertical || edge == .top
-        self.routerViewModel = NORouterViewModel(routerType: routerType, name: name, delegate: routerViewModel.delegate, storage: routerViewModel.storage, estimateBarHeight: estimateBarHeight)
-    }
-    
-    public init(childRouterViewModel:NORouterViewModel, routerViewModel:NORouterViewModel){
-        self.edge = .init()
-        self.routerViewModel = childRouterViewModel
-        self.routerViewModel.delegate = routerViewModel.delegate
-        self.routerViewModel.storage = routerViewModel.storage
+        self.routerViewModel = NORouterViewModel()
+        self.routerViewModel.onInit(routerType: routerType, name: name, delegate: routerViewModel.delegate, storage: routerViewModel.storage, estimateBarHeight: estimateBarHeight)
     }
     
     public var body: some View {
@@ -65,8 +66,7 @@ public struct NOContentView: View {
         return self
     }
     
-    public func onReadied(perform:@escaping()->Void) -> NOContentView{
-        DispatchQueue.main.async { perform() }
-        return self
+    public func getNORouterViewModel() -> NORouterViewModel{
+        return routerViewModel
     }
 }

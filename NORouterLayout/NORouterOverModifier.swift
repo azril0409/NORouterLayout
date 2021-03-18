@@ -26,7 +26,7 @@ public struct NORouterOverModifier:ViewModifier{
                                                                     storage: self.routerViewModel.storage,
                                                                     estimateBarHeight: self.routerViewModel.estimateBarHeight,
                                                                     onDismiss: self.routerViewModel.onDismiss))
-                    .background(Color.white).clipShape(Rectangle()).transition(self.routerViewModel.transition)
+                        .background(Color.white).clipShape(Rectangle()).transition(.move(edge: .bottom))
                 }
             }.frame(maxWidth: .infinity, maxHeight: .infinity))
             .overlay(VStack{

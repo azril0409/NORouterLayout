@@ -12,7 +12,7 @@ struct SceneView: View {
     @EnvironmentObject private var routerViewModel:NORouterViewModel
 
     public var body: some View {
-        ZStack{
+        VStack{
             Spacer().sheet(isPresented: self.$routerViewModel.isSheetView, onDismiss: {
                 self.routerViewModel.onDismiss()
             }) {
@@ -20,9 +20,9 @@ struct SceneView: View {
             }
             if !self.routerViewModel.isAnimationRunning {
                 if let sceneView = self.routerViewModel.sceneView {
-                    sceneView.transition(self.routerViewModel.transition)
-                }else{
-                    self.routerViewModel.getContentView().transition(self.routerViewModel.transition)
+                    sceneView
+                }else if let sceneView = self.routerViewModel.getContentView(){
+                    sceneView
                 }
             }
         }
