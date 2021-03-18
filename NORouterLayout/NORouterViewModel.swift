@@ -44,6 +44,28 @@ public class NORouterViewModel:ObservableObject{
      */
     @Published var bottomSheetView:AnyView? = nil
     
+    public init<Content:View>(contentView:Content,
+                              name:String = ""){
+        self.contentView = AnyView(contentView)
+        previouRouterViewModel = nil
+        delegate = nil
+        storage = NOEnvironmentObjectStorage()
+        self.contentName = name
+        self.estimateBarHeight = false
+        onDismiss = {}
+    }
+    
+    public init<Router:RouterType>(routerType:Router,
+                              name:String = ""){
+        self.contentRouter = routerType
+        previouRouterViewModel = nil
+        delegate = nil
+        storage = NOEnvironmentObjectStorage()
+        self.contentName = name
+        self.estimateBarHeight = false
+        onDismiss = {}
+    }
+    
     init() {
         previouRouterViewModel = nil
         delegate = nil

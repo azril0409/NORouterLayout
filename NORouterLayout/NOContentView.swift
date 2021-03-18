@@ -57,6 +57,14 @@ public struct NOContentView: View {
         self.routerViewModel.onInit(routerType: routerType, name: name, delegate: routerViewModel.delegate, storage: routerViewModel.storage, estimateBarHeight: estimateBarHeight)
     }
     
+    public init(childRouterViewModel:NORouterViewModel, routerViewModel:NORouterViewModel){
+        self.edge = .init()
+        self.routerViewModel = childRouterViewModel
+        self.routerViewModel.delegate = routerViewModel.delegate
+        self.routerViewModel.storage = routerViewModel.storage
+    }
+
+    
     public var body: some View {
         SceneView().edgesIgnoringSafeArea(edge).environmentObject(self.routerViewModel)
     }
