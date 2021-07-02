@@ -8,12 +8,12 @@
 
 import SwiftUI
 
-public class NOEnvironmentObjectStorage{
-    typealias T = ObservableObject
+public class NOObservableObjectStorage{
     var objects:[String:AnyObject] = [:]
+    
     init(){}
     
-    func injectEnvironmentObject<T:ObservableObject>(object:T){
+    public func injectEnvironmentObject<T:ObservableObject>(object:T){
         let type = String(describing:object).components(separatedBy: ".").last!.components(separatedBy: ":").first!
         objects[type] = object
     }

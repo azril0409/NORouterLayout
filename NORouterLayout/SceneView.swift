@@ -13,19 +13,19 @@ struct SceneView: View {
 
     public var body: some View {
         ZStack{
-            Spacer().sheet(isPresented: self.$routerViewModel.isSheetView, onDismiss: {
-                self.routerViewModel.onDismiss()
-            }) {
-                self.routerViewModel.sheetView
-            }
+            Spacer().sheet(isPresented: self.$routerViewModel.isSheetView, onDismiss: self.onDismiss, content: onSheetContent)
             if !self.routerViewModel.isAnimationRunning {
-                if let sceneView = self.routerViewModel.sceneView {
-                    sceneView
-                }else if let sceneView = self.routerViewModel.getContentView(){
-                    sceneView
-                }
+                self.routerViewModel.sceneView?.transition(.opacity)
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
+    
+    private func onDismiss(){
+        self.routerViewModel.onDismiss()
+    }
+    
+    private func onSheetContent() -> some View{
+        self.routerViewModel.sheetView
     }
 }

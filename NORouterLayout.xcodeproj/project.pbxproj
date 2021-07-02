@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		742054BE268EB47000BF2A10 /* NORootViewCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 742054BD268EB47000BF2A10 /* NORootViewCreator.swift */; };
+		742054C0268EE58800BF2A10 /* NORouterCoverViewMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 742054BF268EE58800BF2A10 /* NORouterCoverViewMode.swift */; };
+		742054C2268EF1C400BF2A10 /* NORouterBottomViewMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 742054C1268EF1C400BF2A10 /* NORouterBottomViewMode.swift */; };
+		742054C4268EFE3200BF2A10 /* FragmentViewMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 742054C3268EFE3200BF2A10 /* FragmentViewMode.swift */; };
+		742054C6268EFF2000BF2A10 /* FragmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 742054C5268EFF2000BF2A10 /* FragmentView.swift */; };
 		7426312C259967200086A2D2 /* NORouterDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7426312B2599671F0086A2D2 /* NORouterDelegate.swift */; };
 		7426312F259969740086A2D2 /* NORouterSubscriber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7426312E259969740086A2D2 /* NORouterSubscriber.swift */; };
 		74354A9A2592CF6200219FBC /* NORouterLayout.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 74D234C8250868210055866F /* NORouterLayout.framework */; };
@@ -33,12 +38,11 @@
 		74568BAA2590A19900B08FD0 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74568BA92590A19900B08FD0 /* MainView.swift */; };
 		748A59352536C2D800983267 /* RouterType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 748A59342536C2D800983267 /* RouterType.swift */; };
 		74D234CD250868210055866F /* NORouterLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = 74D234CB250868210055866F /* NORouterLayout.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		74D234D4250869B60055866F /* NOContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D234D3250869B60055866F /* NOContentView.swift */; };
 		74D234D8250876670055866F /* NORouterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D234D7250876670055866F /* NORouterViewModel.swift */; };
 		74D2F91725BFC6AD00BB6F29 /* ChildView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D2F91625BFC6AD00BB6F29 /* ChildView.swift */; };
 		74D2F91C25BFC7B400BB6F29 /* TestObservableObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D2F91B25BFC7B400BB6F29 /* TestObservableObject.swift */; };
 		74E85BB9255E22B900FB1A65 /* SizePreferenceKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74E85BB8255E22B800FB1A65 /* SizePreferenceKey.swift */; };
-		74E981F1258CA5210046B3A9 /* NOEnvironmentObjectStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74E981F0258CA5210046B3A9 /* NOEnvironmentObjectStorage.swift */; };
+		74E981F1258CA5210046B3A9 /* NOObservableObjectStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74E981F0258CA5210046B3A9 /* NOObservableObjectStorage.swift */; };
 		74E981F4258CAEC00046B3A9 /* NORouterOverModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74E981F3258CAEC00046B3A9 /* NORouterOverModifier.swift */; };
 		74EDA3762536D8520063F7C2 /* NONavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EDA3752536D8520063F7C2 /* NONavigationBar.swift */; };
 		74F6BFD7257E1017009D42C1 /* SceneView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F6BFD6257E1017009D42C1 /* SceneView.swift */; };
@@ -87,6 +91,11 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		742054BD268EB47000BF2A10 /* NORootViewCreator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NORootViewCreator.swift; sourceTree = "<group>"; };
+		742054BF268EE58800BF2A10 /* NORouterCoverViewMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NORouterCoverViewMode.swift; sourceTree = "<group>"; };
+		742054C1268EF1C400BF2A10 /* NORouterBottomViewMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NORouterBottomViewMode.swift; sourceTree = "<group>"; };
+		742054C3268EFE3200BF2A10 /* FragmentViewMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FragmentViewMode.swift; sourceTree = "<group>"; };
+		742054C5268EFF2000BF2A10 /* FragmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FragmentView.swift; sourceTree = "<group>"; };
 		7426312B2599671F0086A2D2 /* NORouterDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NORouterDelegate.swift; sourceTree = "<group>"; };
 		7426312E259969740086A2D2 /* NORouterSubscriber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NORouterSubscriber.swift; sourceTree = "<group>"; };
 		7445991B2536E2F00015FDC7 /* Sample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Sample.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -115,12 +124,11 @@
 		74D234C8250868210055866F /* NORouterLayout.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = NORouterLayout.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		74D234CB250868210055866F /* NORouterLayout.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NORouterLayout.h; sourceTree = "<group>"; };
 		74D234CC250868210055866F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		74D234D3250869B60055866F /* NOContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NOContentView.swift; sourceTree = "<group>"; };
 		74D234D7250876670055866F /* NORouterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NORouterViewModel.swift; sourceTree = "<group>"; };
 		74D2F91625BFC6AD00BB6F29 /* ChildView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChildView.swift; sourceTree = "<group>"; };
 		74D2F91B25BFC7B400BB6F29 /* TestObservableObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestObservableObject.swift; sourceTree = "<group>"; };
 		74E85BB8255E22B800FB1A65 /* SizePreferenceKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SizePreferenceKey.swift; sourceTree = "<group>"; };
-		74E981F0258CA5210046B3A9 /* NOEnvironmentObjectStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NOEnvironmentObjectStorage.swift; sourceTree = "<group>"; };
+		74E981F0258CA5210046B3A9 /* NOObservableObjectStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NOObservableObjectStorage.swift; sourceTree = "<group>"; };
 		74E981F3258CAEC00046B3A9 /* NORouterOverModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NORouterOverModifier.swift; sourceTree = "<group>"; };
 		74EDA3752536D8520063F7C2 /* NONavigationBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NONavigationBar.swift; sourceTree = "<group>"; };
 		74F6BFD6257E1017009D42C1 /* SceneView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneView.swift; sourceTree = "<group>"; };
@@ -236,18 +244,22 @@
 		74D234CA250868210055866F /* NORouterLayout */ = {
 			isa = PBXGroup;
 			children = (
+				742054C5268EFF2000BF2A10 /* FragmentView.swift */,
+				742054C3268EFE3200BF2A10 /* FragmentViewMode.swift */,
 				74D234CC250868210055866F /* Info.plist */,
-				74F6BFD6257E1017009D42C1 /* SceneView.swift */,
-				74D234D3250869B60055866F /* NOContentView.swift */,
-				74E981F0258CA5210046B3A9 /* NOEnvironmentObjectStorage.swift */,
 				74EDA3752536D8520063F7C2 /* NONavigationBar.swift */,
+				74E981F0258CA5210046B3A9 /* NOObservableObjectStorage.swift */,
+				742054BD268EB47000BF2A10 /* NORootViewCreator.swift */,
+				742054C1268EF1C400BF2A10 /* NORouterBottomViewMode.swift */,
+				742054BF268EE58800BF2A10 /* NORouterCoverViewMode.swift */,
+				7426312B2599671F0086A2D2 /* NORouterDelegate.swift */,
 				74D234CB250868210055866F /* NORouterLayout.h */,
 				74E981F3258CAEC00046B3A9 /* NORouterOverModifier.swift */,
+				7426312E259969740086A2D2 /* NORouterSubscriber.swift */,
 				74D234D7250876670055866F /* NORouterViewModel.swift */,
 				748A59342536C2D800983267 /* RouterType.swift */,
+				74F6BFD6257E1017009D42C1 /* SceneView.swift */,
 				74E85BB8255E22B800FB1A65 /* SizePreferenceKey.swift */,
-				7426312B2599671F0086A2D2 /* NORouterDelegate.swift */,
-				7426312E259969740086A2D2 /* NORouterSubscriber.swift */,
 			);
 			path = NORouterLayout;
 			sourceTree = "<group>";
@@ -427,16 +439,20 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				742054BE268EB47000BF2A10 /* NORootViewCreator.swift in Sources */,
 				7426312C259967200086A2D2 /* NORouterDelegate.swift in Sources */,
-				74E981F1258CA5210046B3A9 /* NOEnvironmentObjectStorage.swift in Sources */,
+				742054C4268EFE3200BF2A10 /* FragmentViewMode.swift in Sources */,
+				74E981F1258CA5210046B3A9 /* NOObservableObjectStorage.swift in Sources */,
 				74D234D8250876670055866F /* NORouterViewModel.swift in Sources */,
 				7426312F259969740086A2D2 /* NORouterSubscriber.swift in Sources */,
 				74E981F4258CAEC00046B3A9 /* NORouterOverModifier.swift in Sources */,
-				74D234D4250869B60055866F /* NOContentView.swift in Sources */,
 				74F6BFD7257E1017009D42C1 /* SceneView.swift in Sources */,
+				742054C6268EFF2000BF2A10 /* FragmentView.swift in Sources */,
 				748A59352536C2D800983267 /* RouterType.swift in Sources */,
 				74EDA3762536D8520063F7C2 /* NONavigationBar.swift in Sources */,
 				74E85BB9255E22B900FB1A65 /* SizePreferenceKey.swift in Sources */,
+				742054C2268EF1C400BF2A10 /* NORouterBottomViewMode.swift in Sources */,
+				742054C0268EE58800BF2A10 /* NORouterCoverViewMode.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -694,7 +710,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.3.2;
+				MARKETING_VERSION = 1.4.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.neetoffice.widget.NORouterLayout;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -722,7 +738,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.3.2;
+				MARKETING_VERSION = 1.4.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.neetoffice.widget.NORouterLayout;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;

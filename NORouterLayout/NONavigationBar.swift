@@ -9,7 +9,8 @@
 import SwiftUI
 
 public struct NONavigationBar: View {
-    @EnvironmentObject private var routerViewModel:NORouterViewModel
+    @EnvironmentObject private var rvm:NORouterViewModel
+    @EnvironmentObject private var cvm:NORouterCoverViewMode
     private let labelLayer:AnyView
     private let menuLayer:AnyView
     
@@ -35,19 +36,19 @@ public struct NONavigationBar: View {
     
     public var body: some View {
         HStack{
-            if self.routerViewModel.canDismissCover() || self.routerViewModel.canDismiss() || self.routerViewModel.canDismissSheet() {
+            if self.cvm.canDismiss() || self.rvm.canDismiss() || self.rvm.canDismissSheet() {
                 Button(action: {
-                    if self.routerViewModel.canDismiss(){
-                        self.routerViewModel.dismiss()
-                    }else if self.routerViewModel.canDismissSheet() {
-                        self.routerViewModel.dismissSheet()
-                    }else if self.routerViewModel.canDismissCover() {
-                        self.routerViewModel.dismissCover()
+                    if self.rvm.canDismiss(){
+                        self.rvm.dismiss()
+                    }else if self.rvm.canDismissSheet() {
+                        self.rvm.dismissSheet()
+                    }else if self.cvm.canDismiss() {
+                        self.cvm.dismiss()
                     }
                 }, label: {
                     HStack(alignment: .center, spacing: 8){
                         Image(systemName: "arrow.left")
-                        Text(routerViewModel.getPreviouName() ?? "").font(.system(size: 24)).minimumScaleFactor(0.5)
+                        Text(rvm.getPreviouName() ?? "").font(.system(size: 24)).minimumScaleFactor(0.5)
                     }
                 })
             }
@@ -57,11 +58,17 @@ public struct NONavigationBar: View {
         }
         .frame(maxWidth: .infinity, minHeight: 40)
         .padding(8)
-        .padding(.top, self.routerViewModel.estimateBarHeight ? self.safeAreaTopPadding() : 0)
+        .padding(.top, self.safeAreaTopPadding())
     }
     
     private func safeAreaTopPadding() -> CGFloat{
-        UIApplication.shared.windows.first?.safeAreaInsets.top ?? 16
+        let edge = self.rvm.sceneEdge
+        let estimateBarHeight = edge == .all || edge == .vertical || edge == .top
+        if estimateBarHeight {
+            return UIApplication.shared.windows.first?.safeAreaInsets.top ?? 16
+        }else {
+            return 0
+        }
     }
     
 }

@@ -11,19 +11,17 @@ import UIKit
 import Combine
 
 public class NORouterViewModel:ObservableObject{
-    private var previouRouterViewModel:NORouterViewModel?
-    public var delegate:NORouterDelegate?
-    var storage:NOEnvironmentObjectStorage
-    var estimateBarHeight:Bool
-    private var contentView:AnyView? = nil
-    private var contentRouter:RouterType? = nil
-    
+    static let DEFAULT_ANIMATION = Animation.spring(response: 0.35, dampingFraction: 0.72, blendDuration: 0)
+    var previouRouterViewModel:NORouterViewModel?
+    var delegate:NORouterDelegate
+    var storage:NOObservableObjectStorage
     /**
      
      */
     @Published var isAnimationRunning:Bool = false
     @Published var sceneView:AnyView? = nil
     @Published var contentName:String
+    var sceneEdge:Edge.Set = .init()
     private var viewHistory:[AnyView] = []
     private var nameList:[String] = []
     /**
@@ -34,128 +32,17 @@ public class NORouterViewModel:ObservableObject{
     @Published var sheetView:AnyView? = nil
     let onDismiss:()->Void
     
-    /**
-     
-     */
-    @Published var coverView:AnyView? = nil
-    
-    /**
-     
-     */
-    @Published var bottomSheetView:AnyView? = nil
-    
-    public init<Content:View>(contentView:Content,
-                              name:String = ""){
-        self.contentView = AnyView(contentView)
+    public init() {
         previouRouterViewModel = nil
-        delegate = nil
-        storage = NOEnvironmentObjectStorage()
-        self.contentName = name
-        self.estimateBarHeight = false
-        onDismiss = {}
-    }
-    
-    public init<Router:RouterType>(routerType:Router,
-                                   name:String = ""){
-        self.contentRouter = routerType
-        previouRouterViewModel = nil
-        delegate = nil
-        storage = NOEnvironmentObjectStorage()
-        self.contentName = name
-        self.estimateBarHeight = false
-        onDismiss = {}
-    }
-    
-    init() {
-        previouRouterViewModel = nil
-        delegate = nil
-        storage = NOEnvironmentObjectStorage()
+        delegate = NORouterDelegateImpl()
+        storage = NOObservableObjectStorage()
         self.contentName = ""
-        self.estimateBarHeight = false
         onDismiss = {}
-    }
-    
-    func onInit<Content:View>(contentView:Content,
-                              name:String = "",
-                              delegate:NORouterDelegate?,
-                              storage:NOEnvironmentObjectStorage = NOEnvironmentObjectStorage(),
-                              estimateBarHeight:Bool) {
-        self.contentView = AnyView(contentView)
-        self.contentName = name
-        self.delegate = delegate
-        self.previouRouterViewModel = nil
-        self.storage = storage
-        self.estimateBarHeight = estimateBarHeight
-    }
-    
-    func onInit<Router:RouterType>(routerType:Router,
-                                   name:String = "",
-                                   delegate:NORouterDelegate?,
-                                   storage:NOEnvironmentObjectStorage = NOEnvironmentObjectStorage(),
-                                   estimateBarHeight:Bool) {
-        self.contentRouter = routerType
-        self.contentName = name
-        self.delegate = delegate
-        self.previouRouterViewModel = nil
-        self.storage = storage
-        self.estimateBarHeight = estimateBarHeight
-    }
-    
-    func onInit(routerViewModel:NORouterViewModel) {
-        self.contentView = routerViewModel.contentView
-        self.contentRouter = routerViewModel.contentRouter
-        self.contentName = routerViewModel.contentName
-        self.delegate = routerViewModel.delegate
-        self.previouRouterViewModel = routerViewModel.previouRouterViewModel
-        self.storage = routerViewModel.storage
-        self.estimateBarHeight = routerViewModel.estimateBarHeight
-    }
-    
-    init(contentView:AnyView,
-         name:String = "",
-         delegate:NORouterDelegate?,
-         previouRouterViewModel:NORouterViewModel,
-         storage:NOEnvironmentObjectStorage = NOEnvironmentObjectStorage(),
-         estimateBarHeight:Bool,
-         onDismiss:@escaping ()->Void){
-        self.contentView = contentView
-        self.contentName = name
-        self.delegate = delegate
-        self.previouRouterViewModel = previouRouterViewModel
-        self.onDismiss = onDismiss
-        self.storage = storage
-        self.estimateBarHeight = estimateBarHeight
     }
 }
 
-/**
- 
- */
+//MARK: Get conent view name
 extension NORouterViewModel{
-    func getContentView() -> AnyView {
-        let view:AnyView
-        if let contentRouter = self.contentRouter {
-            view = contentRouter.onCreateView(storage: self.storage)
-        } else if let contentView = self.contentView {
-            view = contentView
-        } else {
-            view = AnyView(EmptyView())
-        }
-        let impl = NORouterSubscriberImpl(contentView: view, storage: self.storage)
-        self.delegate?.routerOnCreateView(impl)
-        self.sceneView = impl.contentView
-        self.contentView = nil
-        self.contentRouter = nil
-        return self.sceneView!
-    }
-    
-    func injectEnvironmentObject<T:ObservableObject>(_ object:T){
-        self.storage.injectEnvironmentObject(object: object)
-        if let contentView = self.contentView, delegate == nil {
-            self.contentView = AnyView(contentView.environmentObject(object))
-        }
-    }
-    
     public func getConentName()->String{
         self.contentName
     }
@@ -165,47 +52,9 @@ extension NORouterViewModel{
     }
 }
 
-/**
- 
- */
-//MARK:Content
+
+//MARK: Dismiss operation
 extension NORouterViewModel{
-    public func present<Router:RouterType>(_ routerType:Router){
-        self.present(routerType, "")
-    }
-    
-    public func present<Router:RouterType>(_ routerType:Router, _ name:String = ""){
-        self.present(routerType.onCreateView(storage: self.storage), name)
-    }
-    
-    public func present<Content:View>(_ presentView:Content){
-        self.present(presentView, "")
-    }
-    
-    public func present<Content:View>(_ presentView:Content, _ name:String = ""){
-        self.present(AnyView(presentView), name)
-    }
-    
-    public func present(_ presentView:AnyView){
-        self.present(presentView, "")
-    }
-    
-    public func present(_ presentView:AnyView, _ name:String = ""){
-        if self.sceneView == nil {
-            self.sceneView = self.getContentView()
-        }
-        self.viewHistory.append(self.sceneView!)
-        self.nameList.append(self.contentName)
-        self.sceneView = nil
-        self.isAnimationRunning = true
-        let impl = NORouterSubscriberImpl(contentView: presentView, storage: self.storage)
-        self.delegate?.routerOnCreateView(impl)
-        withAnimation(.spring(response: 0.35, dampingFraction: 0.72, blendDuration: 0)) {
-            self.isAnimationRunning = false
-            self.sceneView = impl.contentView
-            self.contentName = name
-        }
-    }
     
     public func canDismiss() -> Bool{
         !self.viewHistory.isEmpty
@@ -214,16 +63,17 @@ extension NORouterViewModel{
     public func dismiss(){
         if viewHistory.isEmpty || self.nameList.isEmpty { return }
         self.isAnimationRunning = true
-        withAnimation(.spring(response: 0.35, dampingFraction: 0.72, blendDuration: 0)) {
-            self.isAnimationRunning = false
+        self.sceneView = nil
+        withAnimation(NORouterViewModel.DEFAULT_ANIMATION) {
             self.sceneView = self.viewHistory.removeLast()
             self.contentName = self.nameList.removeLast()
+            self.isAnimationRunning = false
         }
     }
     
     public func dismiss(to name:String){
         self.isAnimationRunning = true
-        withAnimation(.spring(response: 0.35, dampingFraction: 0.72, blendDuration: 0)) {
+        withAnimation(NORouterViewModel.DEFAULT_ANIMATION) {
             self.isAnimationRunning = false
             while self.contentName != name {
                 if viewHistory.isEmpty || self.nameList.isEmpty { return }
@@ -235,38 +85,81 @@ extension NORouterViewModel{
     
 }
 
-/**
- 
- */
-//MARK:Sheet
+//MARK: Present operation
 extension NORouterViewModel{
-    
-    public func sheet<Router:RouterType>(_ routerType:Router,_ onDismiss:@escaping ()->Void = {}){
-        self.sheet(routerType, "", onDismiss)
+    public func present<Router:RouterType>(_ routerType:Router, _ name:String = ""){
+        self.present(routerType.onCreateView(storage: self.storage), name)
     }
     
+    public func present<Content:View>(_ content:Content, _ name:String = ""){
+        self.present(AnyView(content), name)
+    }
+    
+    public func present(_ view:AnyView, _ name:String = ""){
+        guard let sceneView = self.sceneView else { return }
+        self.viewHistory.append(sceneView)
+        self.nameList.append(self.contentName)
+        self.isAnimationRunning = true
+        self.sceneView = nil
+        let impl = NORouterSubscriberImpl(contentView: view, storage: self.storage)
+        delegate.onInjectObject(subscriber: impl)
+        DispatchQueue.main.async {
+            withAnimation(NORouterViewModel.DEFAULT_ANIMATION) {
+                self.sceneView = impl.contentView
+                self.contentName = name
+                self.isAnimationRunning = false
+            }
+        }
+    }
+}
+
+//MARK: Replace operation
+extension NORouterViewModel{
+
+    public func replace<Router:RouterType>(_ routerType:Router, _ name:String = ""){
+        self.replace(routerType.onCreateView(storage: self.storage), name)
+    }
+    
+    
+    public func replace<Content:View>(_ content:Content, _ name:String = ""){
+        self.replace(AnyView(content), name)
+    }
+    
+    public func replace(_ view:AnyView, _ name:String = ""){
+        self.isAnimationRunning = true
+        self.sceneView = nil
+        let impl = NORouterSubscriberImpl(contentView: view, storage: self.storage)
+        delegate.onInjectObject(subscriber: impl)
+        DispatchQueue.main.async {
+            withAnimation(NORouterViewModel.DEFAULT_ANIMATION) {
+                self.sceneView = impl.contentView
+                self.contentName = name
+                self.isAnimationRunning = false
+            }
+        }
+    }
+}
+
+//MARK:Sheet operation
+extension NORouterViewModel{
     public func sheet<Router:RouterType>(_ routerType:Router, _ name:String = "", _ onDismiss:@escaping ()->Void = {}){
         self.sheet(routerType.onCreateView(storage: self.storage), name, onDismiss)
-    }
-    
-    public func sheet<Content:View>(_ presentView:Content, _ onDismiss:@escaping ()->Void = {}){
-        self.sheet(presentView, "", onDismiss)
     }
     
     public func sheet<Content:View>(_ presentView:Content, _ name:String = "", _ onDismiss:@escaping ()->Void = {}){
         self.sheet(AnyView(presentView), name, onDismiss)
     }
     
-    public func sheet(_ sheetView:AnyView, _ onDismiss:@escaping ()->Void = {}){
-        self.sheet(sheetView, "", onDismiss)
-    }
-    
     public func sheet(_ sheetView:AnyView, _ name:String = "", _ onDismiss:@escaping ()->Void = {}){
         DispatchQueue.global(qos: .background).async {
-            let impl = NORouterSubscriberImpl(contentView: sheetView, storage: self.storage)
-            self.delegate?.routerOnCreateView(impl)
+            let sheetView = NORootViewCreator.init(sheetView)
+                .setName(name)
+                .setDelegate(self.delegate)
+                .setStorage(self.storage)
+                .setPreviouRouterViewModel(self)
+                .build()
             DispatchQueue.main.async {
-                self.sheetView = AnyView(SceneView().environmentObject(NORouterViewModel(contentView: impl.contentView, name: name, delegate: self.delegate, previouRouterViewModel: self, storage: self.storage, estimateBarHeight: false, onDismiss: onDismiss)))
+                self.sheetView = AnyView(sheetView)
                 self.isSheetView = true
             }
         }
@@ -283,86 +176,6 @@ extension NORouterViewModel{
         }else if let viewModel = self.previouRouterViewModel {
             viewModel.isSheetView = false
             viewModel.sheetView = .none
-        }
-    }
-}
-
-/**
- 
- */
-//MARK:Cover
-extension NORouterViewModel{
-    
-    public func cover<Content:View>(_ coverView:Content){
-        DispatchQueue.global(qos: .background).async {
-            self.cover(AnyView(coverView))
-        }
-    }
-    
-    public func cover<Router:RouterType>(_ routerType:Router){
-        DispatchQueue.global(qos: .background).async {
-            self.cover(routerType.onCreateView(storage: self.storage))
-        }
-    }
-    
-    public func cover(_ coverView:AnyView){
-        DispatchQueue.main.async {
-            withAnimation(.spring(response: 0.35, dampingFraction: 0.72, blendDuration: 0)) {
-                self.coverView = coverView
-            }
-        }
-    }
-    
-    public func canDismissCover() -> Bool{
-        if self.coverView != nil{
-            return true
-        }else  if let previouRouterViewModel = self.previouRouterViewModel {
-            return previouRouterViewModel.canDismissCover()
-        }else{
-            return false
-        }
-    }
-    
-    public func dismissCover(){
-        withAnimation(.spring(response: 0.35, dampingFraction: 0.72, blendDuration: 0)) {
-            if self.coverView != nil{
-                self.coverView = nil
-            }else if let previouRouterViewModel = self.previouRouterViewModel {
-                previouRouterViewModel.coverView = nil
-            }
-        }
-    }
-}
-
-/**
- 
- */
-//MARK:BottomSheet
-extension NORouterViewModel{
-    
-    public func bottomSheet<Content:View>(_ bottomSheetView:Content){
-        DispatchQueue.global(qos: .background).async {
-            self.bottomSheet(AnyView(bottomSheetView))
-        }
-    }
-    
-    public func bottomSheet<Router:RouterType>(_ routerType:Router){
-        DispatchQueue.global(qos: .background).async {
-            self.bottomSheet(routerType.onCreateView(storage: self.storage))
-        }
-    }
-    
-    public func bottomSheet(_ bottomSheetView:AnyView){
-        DispatchQueue.main.async {
-            withAnimation(.spring(response: 0.35, dampingFraction: 0.72, blendDuration: 0)) {
-                self.bottomSheetView = bottomSheetView
-            }
-        }
-    }
-    
-    public func dismissBottomSheet(){
-        withAnimation(.spring(response: 0.35, dampingFraction: 0.72, blendDuration: 0)) {
-            self.bottomSheetView = nil
         }
     }
 }

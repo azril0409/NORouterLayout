@@ -15,19 +15,20 @@ public protocol NORouterSubscriber {
 
 class NORouterSubscriberImpl:NORouterSubscriber{
     var contentView:AnyView
-    let storage:NOEnvironmentObjectStorage
+    let storage:NOObservableObjectStorage
     
-    init(contentView:AnyView, storage:NOEnvironmentObjectStorage) {
+    init(contentView:AnyView, storage:NOObservableObjectStorage) {
         self.contentView = contentView
         self.storage = storage
     }
     
     func injectEnvironmentObject<T>(_ object: T) where T : ObservableObject {
-        storage.injectEnvironmentObject(object: object)
+        print(contentView)
         contentView = AnyView(contentView.environmentObject(object))
     }
     
     func injectEnvironmentObject<T:ObservableObject>(type:T.Type){
+        print(contentView)
         if let object = storage.getEnvironmentObject(type: type) {
             contentView = AnyView(contentView.environmentObject(object))
         }

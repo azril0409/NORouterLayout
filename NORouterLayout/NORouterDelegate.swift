@@ -9,6 +9,16 @@
 import Foundation
 
 public protocol NORouterDelegate{
-    func routerOnCreateView(_ subscriber:NORouterSubscriber)
+    func onCreateObservableObject(storage:NOObservableObjectStorage)
+    func onInjectObject(subscriber:NORouterSubscriber)
 }
 
+class NORouterDelegateImpl:NORouterDelegate{
+    func onCreateObservableObject(storage: NOObservableObjectStorage) {
+        
+    }
+    
+    func onInjectObject(subscriber: NORouterSubscriber) {
+        
+    }
+}

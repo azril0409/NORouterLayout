@@ -9,7 +9,8 @@
 import SwiftUI
 
 public struct NORouterOverModifier:ViewModifier{
-    @EnvironmentObject private var routerViewModel:NORouterViewModel
+    @EnvironmentObject private var bvm:NORouterBottomViewMode
+    @EnvironmentObject private var coverViewMode:NORouterCoverViewMode
     @State private var bottomSheetY:CGFloat = 0
     @State private var bottomSheetHeight:CGFloat = 0
     
@@ -17,27 +18,12 @@ public struct NORouterOverModifier:ViewModifier{
     
     public func body(content: Content) -> some View {
         return content
-            .overlay(ZStack{
-                if self.routerViewModel.coverView != nil{
-                    SceneView().environmentObject(NORouterViewModel(contentView: self.routerViewModel.coverView!,
-                                                                    name: self.routerViewModel.contentName,
-                                                                    delegate: self.routerViewModel.delegate,
-                                                                    previouRouterViewModel: self.routerViewModel,
-                                                                    storage: self.routerViewModel.storage,
-                                                                    estimateBarHeight: self.routerViewModel.estimateBarHeight,
-                                                                    onDismiss: self.routerViewModel.onDismiss))
-                        .background(Color.white).clipShape(Rectangle()).transition(.move(edge: .bottom))
-                }
-            }.frame(maxWidth: .infinity, maxHeight: .infinity))
+            .overlay(self.cover())
             .overlay(VStack{
                 Spacer()
-                if self.routerViewModel.bottomSheetView != nil {
-                    self.routerViewModel.bottomSheetView
-                        .background(GeometryReader { geometry in
-                            Color.white.preference(key: SizePreferenceKey.self, value: geometry.size)
-                        }.onPreferenceChange(SizePreferenceKey.self){ value in
-                            self.bottomSheetHeight = value.height
-                        })
+                if self.bvm.bottomSheetView != nil {
+                    self.bvm.bottomSheetView
+                        .background(self.bottomSheetBackground())
                         .offset(y:self.bottomSheetY)
                         .gesture(DragGesture()
                                     .onChanged{ value in
@@ -46,7 +32,7 @@ public struct NORouterOverModifier:ViewModifier{
                                         }
                                     }.onEnded{ value in
                                         if self.bottomSheetHeight * 0.5 < abs(self.bottomSheetY){
-                                            self.routerViewModel.dismissBottomSheet()
+                                            self.bvm.dismissBottomSheet()
                                         }
                                         withAnimation(.spring()){
                                             self.bottomSheetY = 0
@@ -56,9 +42,23 @@ public struct NORouterOverModifier:ViewModifier{
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(Color.black.opacity(self.routerViewModel.bottomSheetView != nil ? 0.3 : 0).transition(.opacity)))
+            .background(Color.black.opacity(self.bvm.bottomSheetView != nil ? 0.3 : 0).transition(.opacity)))
     }
     
+    private func cover() -> some View{
+        Group{
+            if self.coverViewMode.coverView != nil{
+                self.coverViewMode.coverView!.background(Color.white).clipShape(Rectangle()).transition(.move(edge: .bottom))
+            }
+        }.frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
     
+    private func bottomSheetBackground() -> some View{
+        GeometryReader { geometry in
+            Color.white.preference(key: SizePreferenceKey.self, value: geometry.size)
+        }.onPreferenceChange(SizePreferenceKey.self){ value in
+            self.bottomSheetHeight = value.height
+        }
+    }
     
 }
